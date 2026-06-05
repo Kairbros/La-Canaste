@@ -1,5 +1,3 @@
-const PORT = process.env['PORT'] ?? 4000
-
 export const swaggerSpec = {
   openapi: '3.0.3',
   info: {
@@ -8,7 +6,7 @@ export const swaggerSpec = {
     description:
       'API REST para la gestión del minimercado: autenticación, categorías, productos, pedidos y estadísticas.',
   },
-  servers: [{ url: `http://localhost:${PORT}`, description: 'Servidor local' }],
+  servers: [{ url: '/', description: 'Servidor actual' }],
   tags: [
     { name: 'Auth', description: 'Autenticación y registro de usuarios' },
     { name: 'Categories', description: 'Gestión de categorías' },
