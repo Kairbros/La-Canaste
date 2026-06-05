@@ -47,7 +47,7 @@ export default function ProductsPage() {
 
   return (
     <div>
-      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 24 }}>
+      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 24, gap: 12, flexWrap: 'wrap' }}>
         <h1 className="adm-title" style={{ marginBottom: 0 }}>Inventario</h1>
         <button onClick={() => { setForm(empty); setEditing(null); setShowForm(true) }} className="adm-btn">
           + Nuevo producto
@@ -57,7 +57,7 @@ export default function ProductsPage() {
       {showForm && (
         <form onSubmit={handleSubmit} className="adm-card" style={{ marginBottom: 24 }}>
           <h2 className="adm-card-title">{editing !== null ? 'Editar producto' : 'Nuevo producto'}</h2>
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: 14 }}>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: 14 }}>
             <div style={{ gridColumn: '1 / -1' }}>
               <label className="adm-label">Nombre</label>
               <input required value={form.name} onChange={e => setForm(p => ({ ...p, name: e.target.value }))} className="adm-input" />
@@ -90,49 +90,51 @@ export default function ProductsPage() {
       )}
 
       <div className="adm-card" style={{ padding: 0, overflow: 'hidden' }}>
-        <table className="custom-table">
-          <thead>
-            <tr>
-              <th>Producto</th>
-              <th>Categoría</th>
-              <th style={{ textAlign: 'right' }}>Precio</th>
-              <th style={{ textAlign: 'center' }}>Estado</th>
-              <th style={{ textAlign: 'right' }}>Acciones</th>
-            </tr>
-          </thead>
-          <tbody>
-            {products.length === 0 && (
-              <tr><td colSpan={5} className="adm-empty" style={{ textAlign: 'center' }}>No hay productos aún.</td></tr>
-            )}
-            {products.map(p => (
-              <tr key={p.id}>
-                <td>
-                  <div className="table-product-cell">
-                    {p.image
-                      ? <img src={p.image} alt={p.name} className="table-product-img" />
-                      : <div className="table-product-img" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'var(--on-surface-variant)' }}><ShoppingCart size={20} /></div>}
-                    <span className="table-product-name">{p.name}</span>
-                  </div>
-                </td>
-                <td style={{ color: 'var(--on-surface-variant)' }}>{p.category?.name}</td>
-                <td style={{ textAlign: 'right', fontWeight: 700 }}>${p.price.toLocaleString('es-CO')}</td>
-                <td style={{ textAlign: 'center' }}>
-                  <span className="adm-pill" style={p.available
-                    ? { background: '#e8f5e9', color: '#006e0a' }
-                    : { background: '#ffeceb', color: '#ba1a1a' }}>
-                    {p.available ? 'Disponible' : 'Agotado'}
-                  </span>
-                </td>
-                <td style={{ textAlign: 'right' }}>
-                  <div style={{ display: 'flex', justifyContent: 'flex-end', gap: 14 }}>
-                    <button onClick={() => handleEdit(p)} className="adm-link edit">Editar</button>
-                    <button onClick={() => handleDelete(p.id)} className="adm-link danger">Eliminar</button>
-                  </div>
-                </td>
+        <div style={{ overflowX: 'auto' }}>
+          <table className="custom-table">
+            <thead>
+              <tr>
+                <th>Producto</th>
+                <th className="hide-mobile">Categoría</th>
+                <th style={{ textAlign: 'right' }}>Precio</th>
+                <th style={{ textAlign: 'center' }}>Estado</th>
+                <th style={{ textAlign: 'right' }}>Acciones</th>
               </tr>
-            ))}
-          </tbody>
-        </table>
+            </thead>
+            <tbody>
+              {products.length === 0 && (
+                <tr><td colSpan={5} className="adm-empty" style={{ textAlign: 'center' }}>No hay productos aún.</td></tr>
+              )}
+              {products.map(p => (
+                <tr key={p.id}>
+                  <td>
+                    <div className="table-product-cell">
+                      {p.image
+                        ? <img src={p.image} alt={p.name} className="table-product-img" />
+                        : <div className="table-product-img" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'var(--on-surface-variant)' }}><ShoppingCart size={20} /></div>}
+                      <span className="table-product-name">{p.name}</span>
+                    </div>
+                  </td>
+                  <td className="hide-mobile" style={{ color: 'var(--on-surface-variant)' }}>{p.category?.name}</td>
+                  <td style={{ textAlign: 'right', fontWeight: 700, whiteSpace: 'nowrap' }}>${p.price.toLocaleString('es-CO')}</td>
+                  <td style={{ textAlign: 'center' }}>
+                    <span className="adm-pill" style={p.available
+                      ? { background: '#e8f5e9', color: '#006e0a' }
+                      : { background: '#ffeceb', color: '#ba1a1a' }}>
+                      {p.available ? 'Disponible' : 'Agotado'}
+                    </span>
+                  </td>
+                  <td style={{ textAlign: 'right' }}>
+                    <div style={{ display: 'flex', justifyContent: 'flex-end', gap: 14 }}>
+                      <button onClick={() => handleEdit(p)} className="adm-link edit">Editar</button>
+                      <button onClick={() => handleDelete(p.id)} className="adm-link danger">Eliminar</button>
+                    </div>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
       </div>
     </div>
   )

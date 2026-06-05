@@ -41,7 +41,7 @@ export default function LoginPage() {
 
   return (
     <div style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 16, background: 'linear-gradient(135deg, #e8f5e9 0%, #f0f3ff 55%, #ffffff 100%)' }}>
-      <div style={{ width: '100%', maxWidth: 400, background: '#fff', borderRadius: 'var(--rounded-xl)', boxShadow: '0 20px 60px rgba(0,0,0,0.10)', padding: 40 }}>
+      <div style={{ width: '100%', maxWidth: 400, background: '#fff', borderRadius: 'var(--rounded-xl)', boxShadow: '0 20px 60px rgba(0,0,0,0.10)', padding: 'clamp(24px, 5vw, 40px)' }}>
         <div style={{ textAlign: 'center', marginBottom: 28 }}>
           <div style={{ width: 64, height: 64, margin: '0 auto 16px', borderRadius: '50%', background: 'var(--primary)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#fff', boxShadow: '0 8px 20px rgba(0,110,10,0.30)' }}>
             <ShoppingCart size={30} />

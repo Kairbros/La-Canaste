@@ -146,7 +146,7 @@ export default function CheckoutPage() {
   return (
     <div style={{ minHeight: '100vh', background: 'var(--background)' }}>
       <header style={{ background: 'var(--primary)', color: '#fff', position: 'sticky', top: 0, zIndex: 30, boxShadow: '0 2px 12px rgba(0,110,10,0.25)' }}>
-        <div style={{ maxWidth: 640, margin: '0 auto', padding: '14px 16px', display: 'flex', alignItems: 'center', gap: 12 }}>
+        <div style={{ maxWidth: 640, margin: '0 auto', padding: '12px clamp(12px, 4vw, 16px)', display: 'flex', alignItems: 'center', gap: 12 }}>
           <button
             onClick={() => navigate('/')}
             aria-label="Volver"
@@ -155,13 +155,13 @@ export default function CheckoutPage() {
             <ArrowLeft size={20} />
           </button>
           <div style={{ lineHeight: 1.2 }}>
-            <h1 style={{ fontSize: 18, fontWeight: 800 }}>Confirmar pedido</h1>
+            <h1 style={{ fontSize: 'clamp(16px, 4vw, 18px)', fontWeight: 800 }}>Confirmar pedido</h1>
             <p style={{ fontSize: 12, opacity: 0.85 }}>La Canasta · Minimercado</p>
           </div>
         </div>
       </header>
 
-      <div style={{ maxWidth: 640, margin: '0 auto', padding: '24px 16px', display: 'flex', flexDirection: 'column', gap: 20 }}>
+      <div style={{ maxWidth: 640, margin: '0 auto', padding: 'clamp(16px, 4vw, 24px) clamp(12px, 4vw, 16px)', display: 'flex', flexDirection: 'column', gap: 20 }}>
         {/* Resumen del pedido */}
         <div className="adm-card">
           <h2 className="adm-card-title">Resumen</h2>
