@@ -57,7 +57,7 @@ export default function UsersPage() {
       {/* Crear usuario */}
       <form onSubmit={handleSubmit} className="adm-card">
         <h2 className="adm-card-title">Nuevo usuario</h2>
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: 12 }}>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))', gap: 12 }}>
           <input required placeholder="Nombre" className="adm-input"
             value={form.name} onChange={e => setForm({ ...form, name: e.target.value })} />
           <input required type="email" placeholder="Correo" className="adm-input"

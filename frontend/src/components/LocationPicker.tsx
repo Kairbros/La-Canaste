@@ -56,7 +56,7 @@ export default function LocationPicker({ value, onChange, storeLat, storeLng, co
     : [4.4389, -75.2322] // Ibagué por defecto
 
   return (
-    <MapContainer center={center} zoom={14} style={{ height: 300, width: '100%', borderRadius: 16 }}>
+    <MapContainer center={center} zoom={14} style={{ height: 'clamp(220px, 40vw, 300px)', width: '100%', borderRadius: 16 }}>
       <TileLayer
         attribution='&copy; OpenStreetMap'
         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"

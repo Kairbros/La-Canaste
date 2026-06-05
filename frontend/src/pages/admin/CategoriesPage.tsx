@@ -49,11 +49,11 @@ export default function CategoriesPage() {
 
       <div className="adm-card">
         <h2 className="adm-card-title">{editing !== null ? 'Editar categoría' : 'Nueva categoría'}</h2>
-        <form onSubmit={handleSubmit} style={{ display: 'flex', gap: 12 }}>
+        <form onSubmit={handleSubmit} style={{ display: 'flex', gap: 12, flexWrap: 'wrap' }}>
           <input
             required value={name} onChange={e => setName(e.target.value)}
             placeholder="Nombre de la categoría"
-            className="adm-input" style={{ flex: 1 }}
+            className="adm-input" style={{ flex: '1 1 180px' }}
           />
           <button type="submit" className="adm-btn">
             {editing !== null ? 'Guardar' : 'Agregar'}

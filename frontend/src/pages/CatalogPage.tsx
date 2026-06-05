@@ -47,16 +47,16 @@ export default function CatalogPage() {
       </header>
 
       {/* Hero */}
-      <section style={{ background: 'linear-gradient(180deg, #f0f3ff 0%, var(--background) 100%)', padding: '60px 0', textAlign: 'center', marginBottom: 40 }}>
-        <h1 style={{ fontSize: 38, fontWeight: 800, color: 'var(--on-surface)', marginBottom: 12, letterSpacing: '-0.02em' }}>
+      <section style={{ background: 'linear-gradient(180deg, #f0f3ff 0%, var(--background) 100%)', padding: '48px 16px', textAlign: 'center', marginBottom: 32 }}>
+        <h1 className="display-xl" style={{ fontSize: 'clamp(24px, 5vw, 38px)', fontWeight: 800, color: 'var(--on-surface)', marginBottom: 12, letterSpacing: '-0.02em' }}>
           Frescura del barrio a tu mesa
         </h1>
-        <p style={{ fontSize: 16, color: 'var(--on-surface-variant)', maxWidth: 550, margin: '0 auto' }}>
+        <p style={{ fontSize: 'clamp(14px, 2.5vw, 16px)', color: 'var(--on-surface-variant)', maxWidth: 550, margin: '0 auto' }}>
           Productos de tu minimercado de confianza, con domicilio rápido en tu zona de cobertura.
         </p>
       </section>
 
-      <div style={{ maxWidth: 'var(--container-max-width)', margin: '0 auto', padding: '0 24px 80px 24px' }}>
+      <div style={{ maxWidth: 'var(--container-max-width)', margin: '0 auto', padding: '0 clamp(12px, 3vw, 24px) clamp(48px, 8vw, 80px) clamp(12px, 3vw, 24px)' }}>
         {/* Chips de categorías */}
         <div className="category-chips" style={{ justifyContent: 'center', marginBottom: 40 }}>
           <button className={`chip ${!selectedCategory ? 'active' : ''}`} onClick={() => setSelectedCategory(undefined)}>

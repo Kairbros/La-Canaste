@@ -1,6 +1,7 @@
+import { useState } from 'react'
 import { NavLink, Outlet, useNavigate } from 'react-router-dom'
 import { useAuth } from '../../context/AuthContext'
-import { LayoutDashboard, Package, Tags, ClipboardList, MapPin, Users, ShoppingCart } from 'lucide-react'
+import { LayoutDashboard, Package, Tags, ClipboardList, MapPin, Users, ShoppingCart, Menu, X } from 'lucide-react'
 
 const links = [
   { to: '/admin', label: 'Dashboard', Icon: LayoutDashboard, end: true },
@@ -14,16 +15,34 @@ const links = [
 export default function AdminLayout() {
   const { user, logout } = useAuth()
   const navigate = useNavigate()
+  const [sidebarOpen, setSidebarOpen] = useState(false)
 
   const handleLogout = () => { logout(); navigate('/admin/login') }
 
+  const closeSidebar = () => setSidebarOpen(false)
+
   return (
     <div className="admin-layout">
+      {/* Overlay para mobile */}
+      <div
+        className={`sidebar-overlay ${sidebarOpen ? 'open' : ''}`}
+        onClick={closeSidebar}
+      />
+
       {/* Sidebar */}
-      <aside className="sidebar">
-        <div className="brand">
-          <h1 style={{ display: 'flex', alignItems: 'center', gap: 8 }}><ShoppingCart size={22} /> La Canasta</h1>
-          <span>Administración Central</span>
+      <aside className={`sidebar ${sidebarOpen ? 'open' : ''}`}>
+        <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', marginBottom: 8 }}>
+          <div className="brand" style={{ marginBottom: 0 }}>
+            <h1 style={{ display: 'flex', alignItems: 'center', gap: 8 }}><ShoppingCart size={22} /> La Canasta</h1>
+            <span>Administración Central</span>
+          </div>
+          <button
+            className="sidebar-close-btn"
+            onClick={closeSidebar}
+            aria-label="Cerrar menú"
+          >
+            <X size={22} />
+          </button>
         </div>
 
         <nav style={{ flexGrow: 1 }}>
@@ -32,7 +51,7 @@ export default function AdminLayout() {
               <li key={l.to} className="sidebar-menu-item">
                 <NavLink
                   to={l.to} end={l.end}
-                  className={({ isActive }) => (isActive ? 'active-link' : '')}
+                  onClick={closeSidebar}
                   style={({ isActive }) => ({
                     display: 'flex', alignItems: 'center', gap: 12, padding: '12px 16px',
                     borderRadius: 'var(--rounded-default)', fontWeight: isActive ? 600 : 500, fontSize: 15,
@@ -64,6 +83,15 @@ export default function AdminLayout() {
 
       {/* Contenido */}
       <main className="admin-main">
+        <div className="admin-mobile-header">
+          <button
+            className="sidebar-toggle"
+            onClick={() => setSidebarOpen(true)}
+            aria-label="Abrir menú"
+          >
+            <Menu size={22} />
+          </button>
+        </div>
         <div style={{ maxWidth: 1080, margin: '0 auto', width: '100%' }}>
           <Outlet />
         </div>

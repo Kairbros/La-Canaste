@@ -70,26 +70,26 @@ export default function OrdersPage() {
         {orders.map(order => {
           const pill = STATUS_PILL[order.status] ?? { label: order.status, bg: '#eee', color: '#333' }
           return (
-            <div key={order.id} className="adm-card" style={{ padding: 18 }}>
+            <div key={order.id} className="adm-card" style={{ padding: 'clamp(14px, 2.5vw, 18px)' }}>
               <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', gap: 12 }}>
-                <div>
-                  <p style={{ fontWeight: 800, color: 'var(--on-surface)', fontSize: 16 }}>
+                <div style={{ minWidth: 0, flex: 1 }}>
+                  <p style={{ fontWeight: 800, color: 'var(--on-surface)', fontSize: 'clamp(15px, 3vw, 16px)', wordBreak: 'break-word' }}>
                     {order.clientName} <span style={{ color: 'var(--on-surface-variant)', fontWeight: 500, fontSize: 14 }}>#{order.id}</span>
                   </p>
-                  <p style={{ fontSize: 14, color: 'var(--on-surface-variant)' }}>{order.address} · {order.phone}</p>
+                  <p style={{ fontSize: 14, color: 'var(--on-surface-variant)', wordBreak: 'break-word' }}>{order.address} · {order.phone}</p>
                   <p style={{ fontSize: 12, color: 'var(--on-surface-variant)', opacity: 0.7 }}>{new Date(order.createdAt).toLocaleString('es-CO')}</p>
                 </div>
-                <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end', gap: 6 }}>
+                <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end', gap: 6, flexShrink: 0 }}>
                   <span className="adm-pill" style={{ background: pill.bg, color: pill.color }}>{pill.label}</span>
                   <p style={{ fontWeight: 800, color: 'var(--primary)' }}>${order.total.toLocaleString('es-CO')}</p>
                 </div>
               </div>
 
               <div style={{ display: 'flex', alignItems: 'center', gap: 10, flexWrap: 'wrap', marginTop: 14 }}>
-                <select value={order.status} onChange={e => updateStatus(order.id, e.target.value)} className="adm-select" style={{ width: 'auto' }}>
+                <select value={order.status} onChange={e => updateStatus(order.id, e.target.value)} className="adm-select" style={{ width: 'auto', minWidth: 140 }}>
                   {STATUSES.map(s => <option key={s} value={s}>{STATUS_LABEL[s]}</option>)}
                 </select>
-                <select value={order.deliveryId ?? ''} onChange={e => assignDelivery(order.id, e.target.value ? Number(e.target.value) : null)} className="adm-select" style={{ width: 'auto' }}>
+                <select value={order.deliveryId ?? ''} onChange={e => assignDelivery(order.id, e.target.value ? Number(e.target.value) : null)} className="adm-select" style={{ width: 'auto', minWidth: 140 }}>
                   <option value="">Sin asignar</option>
                   {deliveries.map(d => <option key={d.id} value={d.id}>{d.name}</option>)}
                 </select>

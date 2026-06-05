@@ -87,7 +87,7 @@ export default function DashboardPage() {
         </ResponsiveContainer>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6" style={{ gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))' }}>
         {/* Top productos */}
         <div className="adm-card">
           <h2 className="adm-card-title">Productos más vendidos</h2>

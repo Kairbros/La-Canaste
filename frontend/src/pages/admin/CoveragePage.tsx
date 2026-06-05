@@ -46,7 +46,7 @@ export default function CoveragePage() {
   }
 
   return (
-    <div style={{ maxWidth: 640 }}>
+    <div style={{ maxWidth: 640, width: '100%' }}>
       <h1 className="adm-title">Cobertura de domicilios</h1>
 
       <div className="adm-card">
