@@ -104,7 +104,8 @@ export const swaggerSpec = {
     '/api/auth/register': {
       post: {
         tags: ['Auth'],
-        summary: 'Registrar un nuevo usuario',
+        summary: 'Registrar un nuevo usuario (solo ADMIN)',
+        security: [{ bearerAuth: [] }],
         requestBody: {
           required: true,
           content: {
