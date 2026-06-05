@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Catálogo de Productos - La Canasta Boutique Digital">
+  <title>La Canasta | Productos Orgánicos y Frescos</title>
+  <link rel="stylesheet" href="style.css">
+  <style>
+    /* Hero section for storefront */
+    .store-hero {
+      background: linear-gradient(180deg, #f0f3ff 0%, var(--background) 100%);
+      padding: 60px 0;
+      text-align: center;
+      margin-bottom: 40px;
+    }
+    
+    .store-hero h1 {
+      font-size: 38px;
+      font-weight: 800;
+      color: var(--on-surface);
+      margin-bottom: 12px;
+      letter-spacing: -0.02em;
+    }
+    
+    .store-hero p {
+      font-size: 16px;
+      color: var(--on-surface-variant);
+      max-width: 550px;
+      margin: 0 auto;
+    }
+
+    .store-container {
+      max-width: var(--container-max-width);
+      margin: 0 auto;
+      padding: 0 24px 80px 24px;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Client Header Navigation -->
+  <header class="client-header">
+    <div class="client-header-container">
+      <a href="index.html" class="client-brand">La Canasta</a>
+      
+      <ul class="client-nav">
+        <li><a href="client-productos.html" class="client-nav-link active">Productos</a></li>
+        <li><a href="#" class="client-nav-link">Lácteos</a></li>
+        <li><a href="#" class="client-nav-link">Panadería</a></li>
+        <li><a href="#" class="client-nav-link">Carnes</a></li>
+        <li><a href="#" class="client-nav-link">Despensa</a></li>
+      </ul>
+
+      <div class="client-search">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z" />
+        </svg>
+        <input type="text" class="client-search-input" placeholder="Buscar ingredientes frescos...">
+      </div>
+
+      <div class="client-header-actions">
+        <!-- Cart Badge Trigger -->
+        <div class="cart-icon-wrapper js-cart-trigger">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" style="width: 26px; height: 26px; stroke: var(--on-surface);">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 10.5V6a3.75 3.75 0 10-7.5 0v4.5m11.356-1.993l1.263 12c.07.665-.45 1.243-1.119 1.243H4.25a1.125 1.125 0 01-1.12-1.243l1.264-12A1.125 1.125 0 015.513 7.5h12.974c.576 0 1.059.435 1.119 1.007zM8.625 10.5a.375.375 0 11-.75 0 .375.375 0 01.75 0zm7.5 0a.375.375 0 11-.75 0 .375.375 0 01.75 0z" />
+          </svg>
+          <span class="cart-badge">2</span>
+        </div>
+        
+        <!-- Profile -->
+        <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=200" alt="Usuario" style="width: 36px; height: 36px; border-radius: var(--rounded-full); object-fit: cover;">
+      </div>
+    </div>
+  </header>
+
+  <!-- Hero introduction banner -->
+  <section class="store-hero">
+    <h1>Frescura de la Granja a tu Mesa</h1>
+    <p>Ingredientes seleccionados localmente, 100% orgánicos y libres de químicos. Disfruta de un sabor saludable en cada comida.</p>
+  </section>
+
+  <!-- Store content -->
+  <div class="store-container">
+    
+    <!-- Filter category row -->
+    <div class="category-chips js-single-select" style="justify-content: center; margin-bottom: 40px;">
+      <button class="chip active js-chip">Todos</button>
+      <button class="chip js-chip">Frutas</button>
+      <button class="chip js-chip">Verduras</button>
+      <button class="chip js-chip">Orgánicos</button>
+      <button class="chip js-chip">Lácteos</button>
+    </div>
+
+    <!-- Product catalog grid -->
+    <section class="product-grid">
+      
+      <!-- Product 1: Aguacates -->
+      <div class="product-card">
+        <span class="badge-organic product-card-badge">Orgánico</span>
+        <div class="product-card-img-wrapper">
+          <a href="client-detalle.html">
+            <img src="https://images.unsplash.com/photo-1523049673857-eb18f1d7b578?auto=format&fit=crop&q=80&w=600" alt="Organic Hass Avocados" class="product-card-img">
+          </a>
+        </div>
+        <div class="product-card-content">
+          <h3 style="font-size: 16px; font-weight: 700; color: var(--on-surface);"><a href="client-detalle.html">Organic Hass Avocados</a></h3>
+          <div class="product-card-price-row">
+            <div class="product-card-price-info">
+              <span class="unit-price">Precio por unidad</span>
+              <span class="price">$2.49</span>
+            </div>
+            <button class="btn-add-cart-circle js-cart-trigger">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" style="width: 20px; height: 20px;">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
+              </svg>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Product 2: Tomatoes -->
+      <div class="product-card">
+        <span class="badge-organic product-card-badge">Orgánico</span>
+        <div class="product-card-img-wrapper">
+          <img src="https://images.unsplash.com/photo-1518977676601-b53f82aba655?auto=format&fit=crop&q=80&w=600" alt="Organic Heirloom Tomatoes" class="product-card-img">
+        </div>
+        <div class="product-card-content">
+          <h3 style="font-size: 16px; font-weight: 700; color: var(--on-surface);">Organic Heirloom Tomatoes</h3>
+          <div class="product-card-price-row">
+            <div class="product-card-price-info">
+              <span class="unit-price">Precio por lb</span>
+              <span class="price">$5.99</span>
+            </div>
+            <button class="btn-add-cart-circle">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" style="width: 20px; height: 20px;">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
+              </svg>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Product 3: Cilantro -->
+      <div class="product-card">
+        <span class="badge-organic product-card-badge">Orgánico</span>
+        <div class="product-card-img-wrapper">
+          <img src="https://images.unsplash.com/photo-1615485290382-441e4d049cb5?auto=format&fit=crop&q=80&w=600" alt="Organic Fresh Cilantro" class="product-card-img">
+        </div>
+        <div class="product-card-content">
+          <h3 style="font-size: 16px; font-weight: 700; color: var(--on-surface);">Organic Fresh Cilantro</h3>
+          <div class="product-card-price-row">
+            <div class="product-card-price-info">
+              <span class="unit-price">Precio por manojo</span>
+              <span class="price">$1.25</span>
+            </div>
+            <button class="btn-add-cart-circle">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" style="width: 20px; height: 20px;">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
+              </svg>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Product 4: Red Onions -->
+      <div class="product-card">
+        <span class="badge-organic product-card-badge">Orgánico</span>
+        <div class="product-card-img-wrapper">
+          <img src="https://images.unsplash.com/photo-1508747703725-719ae257c84a?auto=format&fit=crop&q=80&w=600" alt="Organic Red Onions" class="product-card-img">
+        </div>
+        <div class="product-card-content">
+          <h3 style="font-size: 16px; font-weight: 700; color: var(--on-surface);">Organic Red Onions</h3>
+          <div class="product-card-price-row">
+            <div class="product-card-price-info">
+              <span class="unit-price">Precio por lb</span>
+              <span class="price">$0.85</span>
+            </div>
+            <button class="btn-add-cart-circle">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" style="width: 20px; height: 20px;">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
+              </svg>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Product 5: Limes -->
+      <div class="product-card">
+        <span class="badge-organic product-card-badge">Orgánico</span>
+        <div class="product-card-img-wrapper">
+          <img src="https://images.unsplash.com/photo-1590502593747-42a996133562?auto=format&fit=crop&q=80&w=600" alt="Organic Limes" class="product-card-img">
+        </div>
+        <div class="product-card-content">
+          <h3 style="font-size: 16px; font-weight: 700; color: var(--on-surface);">Organic Limes (3ct)</h3>
+          <div class="product-card-price-row">
+            <div class="product-card-price-info">
+              <span class="unit-price">Precio por pack</span>
+              <span class="price">$1.99</span>
+            </div>
+            <button class="btn-add-cart-circle">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" style="width: 20px; height: 20px;">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
+              </svg>
+            </button>
+          </div>
+        </div>
+      </div>
+
+    </section>
+  </div>
+
+  <!-- Shopping Cart Drawer Overlay -->
+  <div class="cart-drawer-overlay" id="cart-drawer-overlay"></div>
+
+  <!-- Shopping Cart Drawer panel -->
+  <div class="cart-drawer" id="cart-drawer">
+    <div class="cart-drawer-header">
+      <h2>Mi Carrito</h2>
+      <button class="btn-close-drawer" id="cart-close">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" style="width: 20px; height: 20px;">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+        </svg>
+      </button>
+    </div>
+
+    <!-- Scrollable content -->
+    <div class="cart-drawer-content">
+      
+      <!-- Cart Item 1 -->
+      <div class="cart-item">
+        <img src="https://images.unsplash.com/photo-1523049673857-eb18f1d7b578?auto=format&fit=crop&q=80&w=150" alt="Avocados" class="cart-item-img">
+        <div class="cart-item-info">
+          <div class="cart-item-title">Organic Hass Avocados</div>
+          <div class="cart-item-price">$2.49 / ud</div>
+          <div style="margin-top: 8px;">
+            <div class="quantity-selector">
+              <button class="js-qty-minus">-</button>
+              <span class="js-qty-value">2</span>
+              <button class="js-qty-plus">+</button>
+            </div>
+          </div>
+        </div>
+        <button class="category-card-btn" style="color: var(--error);">
+          🗑️
+        </button>
+      </div>
+
+      <!-- Cart Item 2 -->
+      <div class="cart-item">
+        <img src="https://images.unsplash.com/photo-1590502593747-42a996133562?auto=format&fit=crop&q=80&w=150" alt="Limes" class="cart-item-img">
+        <div class="cart-item-info">
+          <div class="cart-item-title">Organic Limes (3ct)</div>
+          <div class="cart-item-price">$1.99 / pack</div>
+          <div style="margin-top: 8px;">
+            <div class="quantity-selector">
+              <button class="js-qty-minus">-</button>
+              <span class="js-qty-value">1</span>
+              <button class="js-qty-plus">+</button>
+            </div>
+          </div>
+        </div>
+        <button class="category-card-btn" style="color: var(--error);">
+          🗑️
+        </button>
+      </div>
+
+    </div>
+
+    <!-- Totals & Checkout -->
+    <div class="cart-drawer-footer">
+      <div class="cart-totals">
+        <div class="cart-total-row">
+          <span>Subtotal</span>
+          <span>$6.97</span>
+        </div>
+        <div class="cart-total-row">
+          <span>Envío</span>
+          <span>$2.50</span>
+        </div>
+        <div class="cart-total-row grand-total">
+          <span>Total</span>
+          <span>$9.47</span>
+        </div>
+      </div>
+      <a href="client-confirmacion.html" class="btn-primary" style="width: 100%; border-radius: var(--rounded-default); padding: 14px; box-shadow: none;">
+        Confirmar Compra
+      </a>
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>

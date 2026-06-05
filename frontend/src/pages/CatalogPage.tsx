@@ -17,68 +17,73 @@ export default function CatalogPage() {
   )
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div style={{ minHeight: '100vh' }}>
       {/* Header */}
-      <header className="bg-green-500 text-white sticky top-0 z-30 shadow-md">
-        <div className="max-w-2xl mx-auto px-4 py-3 flex items-center justify-between">
-          <div>
-            <h1 className="text-xl font-bold leading-tight">Canasta Minimercado</h1>
-            <p className="text-green-100 text-xs">Domicilios al barrio</p>
+      <header className="client-header">
+        <div className="client-header-container">
+          <a className="client-brand">La Canasta</a>
+
+          <div className="client-search">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2.5} stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z" />
+            </svg>
+            <input
+              className="client-search-input"
+              placeholder="Buscar productos..."
+              value={search}
+              onChange={e => setSearch(e.target.value)}
+            />
           </div>
-          <button
-            onClick={() => setCartOpen(true)}
-            className="relative bg-white/20 hover:bg-white/30 rounded-full p-2 transition-colors"
-          >
-            <span className="text-2xl">🛒</span>
-            {count > 0 && (
-              <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs font-bold w-5 h-5 rounded-full flex items-center justify-center">
-                {count}
-              </span>
-            )}
-          </button>
+
+          <div className="client-header-actions">
+            <div className="cart-icon-wrapper" onClick={() => setCartOpen(true)}>
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} style={{ width: 26, height: 26, stroke: 'var(--on-surface)' }}>
+                <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 10.5V6a3.75 3.75 0 10-7.5 0v4.5m11.356-1.993l1.263 12c.07.665-.45 1.243-1.119 1.243H4.25a1.125 1.125 0 01-1.12-1.243l1.264-12A1.125 1.125 0 015.513 7.5h12.974c.576 0 1.059.435 1.119 1.007zM8.625 10.5a.375.375 0 11-.75 0 .375.375 0 01.75 0zm7.5 0a.375.375 0 11-.75 0 .375.375 0 01.75 0z" />
+              </svg>
+              {count > 0 && <span className="cart-badge">{count}</span>}
+            </div>
+          </div>
         </div>
       </header>
 
-      <div className="max-w-2xl mx-auto px-4 py-4 flex flex-col gap-4">
-        {/* Buscador */}
-        <input
-          type="text"
-          placeholder="Buscar productos..."
-          value={search}
-          onChange={e => setSearch(e.target.value)}
-          className="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm shadow-sm focus:outline-none focus:ring-2 focus:ring-green-400"
-        />
+      {/* Hero */}
+      <section style={{ background: 'linear-gradient(180deg, #f0f3ff 0%, var(--background) 100%)', padding: '60px 0', textAlign: 'center', marginBottom: 40 }}>
+        <h1 style={{ fontSize: 38, fontWeight: 800, color: 'var(--on-surface)', marginBottom: 12, letterSpacing: '-0.02em' }}>
+          Frescura del barrio a tu mesa
+        </h1>
+        <p style={{ fontSize: 16, color: 'var(--on-surface-variant)', maxWidth: 550, margin: '0 auto' }}>
+          Productos de tu minimercado de confianza, con domicilio rápido en tu zona de cobertura.
+        </p>
+      </section>
 
-        {/* Categorías */}
-        <div className="flex gap-2 overflow-x-auto pb-1 scrollbar-hide">
-          <button
-            onClick={() => setSelectedCategory(undefined)}
-            className={`shrink-0 px-4 py-2 rounded-full text-sm font-medium transition-colors ${!selectedCategory ? 'bg-green-500 text-white' : 'bg-white text-gray-600 border border-gray-200'}`}
-          >
+      <div style={{ maxWidth: 'var(--container-max-width)', margin: '0 auto', padding: '0 24px 80px 24px' }}>
+        {/* Chips de categorías */}
+        <div className="category-chips" style={{ justifyContent: 'center', marginBottom: 40 }}>
+          <button className={`chip ${!selectedCategory ? 'active' : ''}`} onClick={() => setSelectedCategory(undefined)}>
             Todos
           </button>
           {categories.map(cat => (
             <button
               key={cat.id}
+              className={`chip ${selectedCategory === cat.id ? 'active' : ''}`}
               onClick={() => setSelectedCategory(cat.id)}
-              className={`shrink-0 px-4 py-2 rounded-full text-sm font-medium transition-colors ${selectedCategory === cat.id ? 'bg-green-500 text-white' : 'bg-white text-gray-600 border border-gray-200'}`}
             >
               {cat.name}
             </button>
           ))}
         </div>
 
-        {/* Productos */}
+        {/* Grid de productos */}
         {loading ? (
-          <div className="text-center py-16 text-gray-400">Cargando productos...</div>
+          <div style={{ textAlign: 'center', padding: '64px 0', color: 'var(--on-surface-variant)' }}>Cargando productos...</div>
         ) : filtered.length === 0 ? (
-          <div className="text-center py-16 text-gray-400">No se encontraron productos</div>
+          <div style={{ textAlign: 'center', padding: '64px 0', color: 'var(--on-surface-variant)' }}>No se encontraron productos</div>
         ) : (
-          <div className="grid grid-cols-2 gap-3">
+          <section className="product-grid">
             {filtered.map(product => (
               <ProductCard key={product.id} product={product} />
             ))}
-          </div>
+          </section>
         )}
       </div>
 

@@ -1,0 +1,522 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Gestión de Inventario - La Canasta Administración Central">
+  <title>Gestión de Inventario | La Canasta Admin</title>
+  <link rel="stylesheet" href="style.css">
+  <style>
+    .inventory-layout-top {
+      display: grid;
+      grid-template-columns: 2fr 1fr;
+      gap: var(--card-gap);
+      margin-bottom: 32px;
+    }
+    @media (max-width: 900px) {
+      .inventory-layout-top {
+        grid-template-columns: 1fr;
+      }
+    }
+    .filter-panel {
+      background-color: var(--surface-container-lowest);
+      border: var(--border-level-1);
+      border-radius: var(--rounded-lg);
+      padding: 24px;
+      box-shadow: var(--shadow-level-1);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+    .filter-label {
+      font-size: 12px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--on-surface-variant);
+      margin-bottom: 16px;
+    }
+    .kpi-row {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: var(--card-gap);
+      margin-top: 32px;
+    }
+    @media (max-width: 768px) {
+      .kpi-row {
+        grid-template-columns: 1fr;
+      }
+    }
+    .kpi-card {
+      background-color: var(--surface-container-lowest);
+      border: var(--border-level-1);
+      border-radius: var(--rounded-lg);
+      padding: 24px;
+      box-shadow: var(--shadow-level-1);
+      display: flex;
+      align-items: center;
+      gap: 20px;
+    }
+    .kpi-icon {
+      width: 48px;
+      height: 48px;
+      border-radius: var(--rounded-md);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .kpi-details {
+      display: flex;
+      flex-direction: column;
+    }
+    .kpi-title {
+      font-size: 11px;
+      text-transform: uppercase;
+      font-weight: 700;
+      color: var(--on-surface-variant);
+      letter-spacing: 0.05em;
+    }
+    .kpi-value {
+      font-size: 24px;
+      font-weight: 800;
+      color: var(--on-surface);
+      margin: 4px 0;
+    }
+    .kpi-subtext {
+      font-size: 12px;
+      color: var(--on-surface-variant);
+    }
+    .kpi-green-arrow {
+      color: var(--primary);
+      font-weight: 700;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="admin-layout">
+    
+    <!-- Sidebar -->
+    <aside class="sidebar">
+      <div class="brand">
+        <h1>
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" style="width:26px; height:26px;">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 10.5V6a3.75 3.75 0 10-7.5 0v4.5m11.356-1.993l1.263 12c.07.665-.45 1.243-1.119 1.243H4.25a1.125 1.125 0 01-1.12-1.243l1.264-12A1.125 1.125 0 015.513 7.5h12.974c.576 0 1.059.435 1.119 1.007zM8.625 10.5a.375.375 0 11-.75 0 .375.375 0 01.75 0zm7.5 0a.375.375 0 11-.75 0 .375.375 0 01.75 0z" />
+          </svg>
+          La Canasta
+        </h1>
+        <span>Administración Central</span>
+      </div>
+
+      <nav style="flex-grow: 1;">
+        <ul class="sidebar-menu">
+          <li class="sidebar-menu-item">
+            <a href="index.html">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 12l8.954-8.955c.44-.439 1.152-.439 1.591 0L21.75 12M4.5 9.75v10.125c0 .621.504 1.125 1.125 1.125H9.75v-4.875c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21h4.125c.621 0 1.125-.504 1.125-1.125V9.75M8.25 21h8.25" />
+              </svg>
+              Panel de Control
+            </a>
+          </li>
+          <li class="sidebar-menu-item active">
+            <a href="admin-inventario.html">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M20.25 7.5l-.625 10.632a2.25 2.25 0 01-2.247 2.118H6.622a2.25 2.25 0 01-2.247-2.118L3.75 7.5M10 11.25h4M3.375 7.5h17.25c.621 0 1.125-.504 1.125-1.125v-1.5c0-.621-.504-1.125-1.125-1.125H3.375c-.621 0-1.125.504-1.125 1.125v1.5c0 .621.504 1.125 1.125 1.125z" />
+              </svg>
+              Inventario
+            </a>
+          </li>
+          <li class="sidebar-menu-item">
+            <a href="admin-categorias.html">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M9.568 3H5.25A2.25 2.25 0 003 5.25v4.318c0 .597.237 1.17.659 1.591l9.581 9.581a2.25 2.25 0 003.182 0l5.178-5.178a2.25 2.25 0 000-3.182l-9.581-9.581A2.25 2.25 0 009.568 3z" />
+                <path stroke-linecap="round" stroke-linejoin="round" d="M6 6h.008v.008H6V6z" />
+              </svg>
+              Categorías
+            </a>
+          </li>
+          <li class="sidebar-menu-item">
+            <a href="admin-cobertura.html">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M9 6.75V15m6-6v8.25m.503 3.498l4.89-1.63c.943-.315 1.585-1.198 1.585-2.195V5.07c0-1.612-1.682-2.613-3.182-1.996l-5.132 2.13a1.5 1.5 0 01-1.128 0l-5.132-2.13c-1.5-.617-3.182.384-3.182 1.997v12.285c0 .997.642 1.88 1.585 2.195l4.89 1.63a1.5 1.5 0 001.006 0l5.132-2.13a1.5 1.5 0 011.128 0z" />
+              </svg>
+              Gestión de Cobertura
+            </a>
+          </li>
+          <li class="sidebar-menu-item">
+            <a href="#">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 10.5V6a3.75 3.75 0 10-7.5 0v4.5m11.356-1.993l1.263 12c.07.665-.45 1.243-1.119 1.243H4.25a1.125 1.125 0 01-1.12-1.243l1.264-12A1.125 1.125 0 015.513 7.5h12.974c.576 0 1.059.435 1.119 1.007zM8.625 10.5a.375.375 0 11-.75 0 .375.375 0 01.75 0zm7.5 0a.375.375 0 11-.75 0 .375.375 0 01.75 0z" />
+              </svg>
+              Pedidos
+            </a>
+          </li>
+          <li class="sidebar-menu-item">
+            <a href="#">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M15 19.128a9.38 9.38 0 002.625.372 9.337 9.337 0 004.121-.952 4.125 4.125 0 00-7.533-2.493M15 19.128v-.003c0-1.113-.285-2.16-.786-3.07M15 19.128v.109A11.386 11.386 0 0110.089 21m-2.12-2.121c.54-.486 1.175-.863 1.87-1.111M7.97 18.879L7.967 18.88a9.38 9.38 0 01-2.625-.372 9.337 9.337 0 01-4.121.952 4.125 4.125 0 017.533-2.493M7.97 18.879v-.003c0-1.113.285-2.16.786-3.07M7.97 18.879v.109A11.386 11.386 0 0012.88 21m-1.224-2.39a4.493 4.493 0 00-4.757-3.906M19.5 8.25a3 3 0 11-6 0 3 3 0 016 0zm-10.5 3a3 3 0 11-6 0 3 3 0 016 0z" />
+              </svg>
+              Clientes
+            </a>
+          </li>
+          <li class="sidebar-menu-item">
+            <a href="admin-reportes.html">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M10.5 6a7.5 7.5 0 107.5 7.5h-7.5V6z" />
+                <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 10.5H21A7.5 7.5 0 0013.5 3v7.5z" />
+              </svg>
+              Reportes
+            </a>
+          </li>
+        </ul>
+      </nav>
+
+      <div class="sidebar-footer">
+        <button class="sidebar-btn-new-product js-open-modal" data-modal="new-product-modal">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" style="width: 18px; height: 18px;">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
+          </svg>
+          Nuevo Producto
+        </button>
+        <a href="#" class="sidebar-menu-item" style="margin-left: -16px; width: calc(100% + 32px);">
+          <span style="display: flex; align-items: center; gap: 12px; padding: 12px 16px; color: var(--on-surface-variant); font-size: 15px;">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" style="width: 20px; height: 20px; stroke: var(--on-surface-variant);">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M9.879 7.519c1.171-1.025 3.071-1.025 4.242 0 1.172 1.025 1.172 2.687 0 3.712-.203.179-.43.326-.67.442-.745.361-1.45.999-1.45 1.827v.75M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-9 5.25h.008v.008H12v-.008z" />
+            </svg>
+            Ayuda
+          </span>
+        </a>
+        <a href="#" class="sidebar-menu-item" style="margin-left: -16px; width: calc(100% + 32px);">
+          <span style="display: flex; align-items: center; gap: 12px; padding: 12px 16px; color: var(--on-surface-variant); font-size: 15px;">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" style="width: 20px; height: 20px; stroke: var(--on-surface-variant);">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 9V5.25A2.25 2.25 0 0013.5 3h-6a2.25 2.25 0 00-2.25 2.25v13.5A2.25 2.25 0 007.5 21h6a2.25 2.25 0 002.25-2.25V15M12 9l-3 3m0 0l3 3m-3-3h12.75" />
+            </svg>
+            Cerrar Sesión
+          </span>
+        </a>
+      </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="admin-main">
+      
+      <!-- Top Header -->
+      <header class="admin-header">
+        <div class="search-bar-container">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z" />
+          </svg>
+          <input type="text" class="search-bar" placeholder="Buscar productos, SKU o categorías...">
+        </div>
+
+        <div class="admin-profile">
+          <div class="admin-actions">
+            <button class="admin-icon-btn">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M14.828 14.828a4 4 0 01-5.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+              </svg>
+            </button>
+            <button class="admin-icon-btn">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M9.594 3.94c.09-.542.56-.94 1.11-.94h2.593c.55 0 1.02.398 1.11.94l.213 1.281c.063.374.313.686.645.87.074.04.147.083.22.127.324.196.72.257 1.075.124l1.217-.456a1.125 1.125 0 011.37.49l1.296 2.247a1.125 1.125 0 01-.26 1.43l-1.003.828c-.293.241-.438.613-.43.992a7.723 7.723 0 010 .255c-.008.378.137.75.43.991l1.004.827c.424.35.534.954.26 1.43l-1.298 2.247a1.125 1.125 0 01-1.369.491l-1.217-.456c-.355-.133-.75-.072-1.076.124a6.57 6.57 0 01-.22.128c-.331.183-.581.495-.644.869l-.213 1.28c-.09.543-.56.94-1.11.94h-2.594c-.55 0-1.02-.398-1.11-.94l-.213-1.281c-.062-.374-.312-.686-.644-.87a6.52 6.52 0 01-.22-.127c-.325-.196-.72-.257-1.076-.124l-1.217.456a1.125 1.125 0 01-1.369-.49l-1.297-2.247a1.125 1.125 0 01.26-1.43l1.004-.827c.292-.24.437-.613.43-.992a6.932 6.932 0 010-.255c.007-.378-.138-.75-.43-.991l-1.004-.827a1.125 1.125 0 01-.26-1.43l1.297-2.247a1.125 1.125 0 011.37-.491l1.216.456c.356.133.751.072 1.076-.124.072-.044.146-.087.22-.128.332-.183.582-.495.645-.869l.214-1.28z" />
+                <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+              </svg>
+            </button>
+          </div>
+
+          <div class="admin-user-info">
+            <div class="admin-user-details">
+              <div class="admin-user-name">Admin User</div>
+              <div class="admin-user-role">Super Administrador</div>
+            </div>
+            <img src="https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?auto=format&fit=crop&q=80&w=200" alt="Avatar" class="admin-user-avatar">
+          </div>
+        </div>
+      </header>
+
+      <!-- Main Headline Row -->
+      <section style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 40px;">
+        <div>
+          <h2 class="headline-lg" style="color: var(--on-surface); margin-bottom: 4px;">Gestión de Inventario</h2>
+          <p class="body-md" style="color: var(--on-surface-variant);">Control de existencias y catálogo de productos frescos.</p>
+        </div>
+        <button class="btn-primary js-open-modal" data-modal="new-product-modal">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" style="width: 20px; height: 20px;">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
+          </svg>
+          Nuevo Producto
+        </button>
+      </section>
+
+      <!-- Filters & Stock Warning Row -->
+      <div class="inventory-layout-top">
+        
+        <!-- Filter Panel -->
+        <div class="filter-panel">
+          <div class="filter-label">Filtrar por:</div>
+          <div class="category-chips js-single-select" style="margin-bottom: 0;">
+            <button class="chip active js-chip">Todos</button>
+            <button class="chip js-chip">Frutas</button>
+            <button class="chip js-chip">Verduras</button>
+            <button class="chip js-chip">Orgánicos</button>
+            <button class="chip js-chip">Lácteos</button>
+          </div>
+        </div>
+
+        <!-- Stock Alert Card -->
+        <div class="alert-box alert-danger" style="margin-bottom: 0;">
+          <div class="alert-content">
+            <div class="alert-info">
+              <h4>Stock Bajo</h4>
+              <p>12 ítems</p>
+            </div>
+          </div>
+          <div class="alert-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" style="width: 28px; height: 28px;">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126zM12 15.75h.007v.008H12v-.008z" />
+            </svg>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Inventory Table -->
+      <section class="table-card">
+        <div class="table-wrapper">
+          <table class="custom-table">
+            <thead>
+              <tr>
+                <th style="padding-left: 24px;">Imagen</th>
+                <th>Producto</th>
+                <th>SKU</th>
+                <th>Categoría</th>
+                <th>Precio</th>
+                <th>Stock</th>
+                <th>Acciones</th>
+              </tr>
+            </thead>
+            <tbody>
+              <!-- Row 1: Aguacate Hass -->
+              <tr>
+                <td style="padding-left: 24px;">
+                  <img src="https://images.unsplash.com/photo-1523049673857-eb18f1d7b578?auto=format&fit=crop&q=80&w=150" alt="Aguacate Hass" class="table-product-img">
+                </td>
+                <td>
+                  <div class="table-product-name">Aguacate Hass Premium</div>
+                  <span class="badge-organic">Organic</span>
+                </td>
+                <td style="font-family: monospace; font-size: 13px; color: var(--on-surface-variant);">AVO-HS-001</td>
+                <td><span class="category-count" style="background-color: var(--surface-container-low);">Frutas</span></td>
+                <td class="price-tag" style="font-size: 16px;">$4.50 / kg</td>
+                <td>
+                  <div class="stock-indicator">
+                    <div class="stock-bar">
+                      <div class="stock-bar-fill stock-bar-green" style="width: 90%;"></div>
+                    </div>
+                    <span style="font-weight: 700; color: var(--primary); font-size: 13px;">450 kg</span>
+                  </div>
+                </td>
+                <td>
+                  <div style="display: flex; gap: 8px;">
+                    <button class="category-card-btn">
+                      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" style="width: 18px; height: 18px;">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L6.832 19.82a4.5 4.5 0 01-1.897 1.13l-2.685.8.8-2.685a4.5 4.5 0 011.13-1.897L16.863 4.487zm0 0L19.5 7.125" />
+                      </svg>
+                    </button>
+                    <button class="category-card-btn">
+                      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" style="width: 18px; height: 18px;">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M14.74 9l-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 01-2.244 2.077H8.084a2.25 2.25 0 01-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 00-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 013.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 00-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 00-7.5 0" />
+                      </svg>
+                    </button>
+                  </div>
+                </td>
+              </tr>
+              
+              <!-- Row 2: Zanahoria Nantes -->
+              <tr>
+                <td style="padding-left: 24px;">
+                  <img src="https://images.unsplash.com/photo-1598170845058-32b9d6a5da37?auto=format&fit=crop&q=80&w=150" alt="Zanahoria Nantes" class="table-product-img">
+                </td>
+                <td>
+                  <div class="table-product-name">Zanahoria Nantes</div>
+                  <span class="badge-local">Local</span>
+                </td>
+                <td style="font-family: monospace; font-size: 13px; color: var(--on-surface-variant);">ZAN-NT-042</td>
+                <td><span class="category-count" style="background-color: var(--surface-container-low);">Verduras</span></td>
+                <td class="price-tag" style="font-size: 16px;">$1.20 / ud</td>
+                <td>
+                  <div class="stock-indicator">
+                    <div class="stock-bar">
+                      <div class="stock-bar-fill stock-bar-red" style="width: 15%;"></div>
+                    </div>
+                    <span style="font-weight: 700; color: var(--error); font-size: 13px;">12 ud</span>
+                  </div>
+                </td>
+                <td>
+                  <div style="display: flex; gap: 8px;">
+                    <button class="category-card-btn">
+                      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" style="width: 18px; height: 18px;">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L6.832 19.82a4.5 4.5 0 01-1.897 1.13l-2.685.8.8-2.685a4.5 4.5 0 011.13-1.897L16.863 4.487zm0 0L19.5 7.125" />
+                      </svg>
+                    </button>
+                    <button class="category-card-btn">
+                      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" style="width: 18px; height: 18px;">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M14.74 9l-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 01-2.244 2.077H8.084a2.25 2.25 0 01-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 00-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 013.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 00-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 00-7.5 0" />
+                      </svg>
+                    </button>
+                  </div>
+                </td>
+              </tr>
+              
+              <!-- Row 3: Leche Entera 1L -->
+              <tr>
+                <td style="padding-left: 24px;">
+                  <img src="https://images.unsplash.com/photo-1550583724-b2692b85b150?auto=format&fit=crop&q=80&w=150" alt="Leche Entera" class="table-product-img">
+                </td>
+                <td>
+                  <div class="table-product-name">Leche Entera 1L</div>
+                  <span class="badge-glass">Vidrio</span>
+                </td>
+                <td style="font-family: monospace; font-size: 13px; color: var(--on-surface-variant);">LAC-LE-992</td>
+                <td><span class="category-count" style="background-color: var(--surface-container-low);">Lácteos</span></td>
+                <td class="price-tag" style="font-size: 16px;">$2.80 / ud</td>
+                <td>
+                  <div class="stock-indicator">
+                    <div class="stock-bar">
+                      <div class="stock-bar-fill stock-bar-orange" style="width: 50%;"></div>
+                    </div>
+                    <span style="font-weight: 700; color: #ef6c00; font-size: 13px;">85 ud</span>
+                  </div>
+                </td>
+                <td>
+                  <div style="display: flex; gap: 8px;">
+                    <button class="category-card-btn">
+                      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" style="width: 18px; height: 18px;">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L6.832 19.82a4.5 4.5 0 01-1.897 1.13l-2.685.8.8-2.685a4.5 4.5 0 011.13-1.897L16.863 4.487zm0 0L19.5 7.125" />
+                      </svg>
+                    </button>
+                    <button class="category-card-btn">
+                      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" style="width: 18px; height: 18px;">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M14.74 9l-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 01-2.244 2.077H8.084a2.25 2.25 0 01-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 00-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 013.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 00-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 00-7.5 0" />
+                      </svg>
+                    </button>
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="table-footer">
+          <span>Mostrando 1-10 de 245 productos</span>
+          <div class="pagination">
+            <button class="pagination-btn disabled">&lt;</button>
+            <button class="pagination-btn active">1</button>
+            <button class="pagination-btn">2</button>
+            <button class="pagination-btn">3</button>
+            <button class="pagination-btn">&gt;</button>
+          </div>
+        </div>
+      </section>
+
+      <!-- Bottom KPI Cards -->
+      <section class="kpi-row">
+        <!-- Valor de inventario -->
+        <div class="kpi-card">
+          <div class="kpi-icon icon-wrapper-green">
+            <!-- Banknote icon -->
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" style="width: 24px; height: 24px;">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 18.75a60.07 60.07 0 0115.797 2.101c.727.198 1.453-.342 1.453-1.096V18.75M3.75 4.5h16.5M4.5 19.5h15M3.75 6.75h16.5M3.75 9h16.5M3.75 11.25h16.5m-16.5 2.25h16.5m-16.5 2.25h16.5" />
+            </svg>
+          </div>
+          <div class="kpi-details">
+            <span class="kpi-title">Valor de Inventario</span>
+            <span class="kpi-value">$14,250.00</span>
+            <span class="kpi-subtext"><span class="kpi-green-arrow">↗ +12%</span> este mes</span>
+          </div>
+        </div>
+
+        <!-- Categorías Activas -->
+        <div class="kpi-card">
+          <div class="kpi-icon icon-wrapper-blue">
+            <!-- Layers icon -->
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" style="width: 24px; height: 24px;">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M6.429 9.75L2.25 12l4.179 2.25m0-4.5l5.571 3 5.571-3m-11.142 0L12 7.5l5.571 2.25m0 0L21.75 12l-4.179 2.25m0 0l-5.571 3-5.571-3" />
+            </svg>
+          </div>
+          <div class="kpi-details">
+            <span class="kpi-title">Categorías Activas</span>
+            <span class="kpi-value">18</span>
+            <span class="kpi-subtext">Sin cambios registrados</span>
+          </div>
+        </div>
+
+        <!-- Última Actualización -->
+        <div class="kpi-card">
+          <div class="kpi-icon icon-wrapper-orange">
+            <!-- Clock icon -->
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" style="width: 24px; height: 24px;">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
+          </div>
+          <div class="kpi-details">
+            <span class="kpi-title">Última Actualización</span>
+            <span class="kpi-value">Hace 15m</span>
+            <span class="kpi-subtext">Sincronización automática OK</span>
+          </div>
+        </div>
+      </section>
+
+    </main>
+  </div>
+
+  <!-- New Product Modal Dialog -->
+  <div class="modal-container" id="new-product-modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2>Crear Nuevo Producto</h2>
+        <button class="btn-close-drawer js-close-modal">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" style="width: 20px; height: 20px;">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+          </svg>
+        </button>
+      </div>
+      <form onsubmit="event.preventDefault(); document.getElementById('new-product-modal').classList.remove('open'); setTimeout(() => document.getElementById('new-product-modal').style.display='none', 300);">
+        <div class="modal-form-group">
+          <label for="prod-name">Nombre del Producto</label>
+          <input type="text" id="prod-name" class="modal-form-control" placeholder="Ej. Tomate Chonto" required>
+        </div>
+        <div class="modal-form-group">
+          <label for="prod-sku">Código SKU</label>
+          <input type="text" id="prod-sku" class="modal-form-control" placeholder="Ej. TOM-CH-002" required>
+        </div>
+        <div class="modal-form-group">
+          <label for="prod-cat">Categoría</label>
+          <select id="prod-cat" class="modal-form-control">
+            <option>Frutas</option>
+            <option>Verduras</option>
+            <option>Lácteos</option>
+            <option>Carnes</option>
+          </select>
+        </div>
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
+          <div class="modal-form-group">
+            <label for="prod-price">Precio por Unidad/kg</label>
+            <input type="text" id="prod-price" class="modal-form-control" placeholder="Ej. 2.50" required>
+          </div>
+          <div class="modal-form-group">
+            <label for="prod-stock">Stock Inicial</label>
+            <input type="number" id="prod-stock" class="modal-form-control" placeholder="Ej. 100" required>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn-secondary js-close-modal" style="padding: 10px 20px;">Cancelar</button>
+          <button type="submit" class="btn-primary" style="padding: 10px 24px;">Guardar Producto</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>

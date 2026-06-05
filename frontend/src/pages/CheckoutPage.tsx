@@ -1,9 +1,24 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useCart } from '../context/CartContext'
+import { API } from '../lib/api'
+import LocationPicker, { type LatLng } from '../components/LocationPicker'
+import type { Config } from '../types'
+import { ArrowLeft, MapPin, Loader2, Check, X, MessageCircle } from 'lucide-react'
 
-const WHATSAPP_NUMBER = '573000000000' // Cambia por el número real del negocio
-const API = 'http://localhost:4000/api'
+const WHATSAPP_NUMBER = '573144063533' // Número del negocio
+
+// Distancia en km (Haversine) para validar la cobertura en el cliente.
+const distanceKm = (lat1: number, lng1: number, lat2: number, lng2: number) => {
+  const R = 6371
+  const toRad = (d: number) => (d * Math.PI) / 180
+  const dLat = toRad(lat2 - lat1)
+  const dLng = toRad(lng2 - lng1)
+  const a =
+    Math.sin(dLat / 2) ** 2 +
+    Math.cos(toRad(lat1)) * Math.cos(toRad(lat2)) * Math.sin(dLng / 2) ** 2
+  return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a))
+}
 
 export default function CheckoutPage() {
   const { items, total, clearCart } = useCart()
@@ -13,9 +28,45 @@ export default function CheckoutPage() {
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
 
+  const [config, setConfig] = useState<Config | null>(null)
+  const [location, setLocation] = useState<LatLng | null>(null)
+
+  useEffect(() => {
+    fetch(`${API}/config`).then(r => r.json()).then(setConfig)
+  }, [])
+
   if (items.length === 0) {
     navigate('/')
     return null
+  }
+
+  // Estado de cobertura de la ubicación seleccionada
+  const coverage = (() => {
+    if (!config || !location) return null
+    const distance = distanceKm(config.storeLat, config.storeLng, location.lat, location.lng)
+    return { distance, covered: distance <= config.coverageRadius }
+  })()
+
+  const [locating, setLocating] = useState(false)
+
+  const useMyLocation = () => {
+    if (!navigator.geolocation) {
+      setError('Tu navegador no permite geolocalización')
+      return
+    }
+    setLocating(true)
+    setError('')
+    navigator.geolocation.getCurrentPosition(
+      pos => {
+        setLocation({ lat: pos.coords.latitude, lng: pos.coords.longitude })
+        setLocating(false)
+      },
+      () => {
+        setError('No se pudo obtener tu ubicación. Tócala directamente en el mapa.')
+        setLocating(false)
+      },
+      { enableHighAccuracy: true, timeout: 10000, maximumAge: 0 }
+    )
   }
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -24,20 +75,24 @@ export default function CheckoutPage() {
 
   const buildWhatsAppMessage = () => {
     const lines = items.map(
-      i => `• ${i.product.name} x${i.quantity} — $${(i.product.price * i.quantity).toLocaleString('es-CO')}`
+      i => `- ${i.product.name} x${i.quantity}: $${(i.product.price * i.quantity).toLocaleString('es-CO')}`
     )
+    const ubicacion = location
+      ? `Ubicacion: https://www.google.com/maps?q=${location.lat},${location.lng}`
+      : ''
     return [
-      '🛒 *Nuevo pedido*',
+      'Nuevo pedido',
       '',
-      `👤 *Cliente:* ${form.clientName}`,
-      `📍 *Dirección:* ${form.address}`,
-      `📞 *Teléfono:* ${form.phone}`,
+      `Cliente: ${form.clientName}`,
+      `Direccion: ${form.address}`,
+      `Telefono: ${form.phone}`,
       '',
-      '*Productos:*',
+      'Productos:',
       ...lines,
       '',
-      `💰 *Total: $${total.toLocaleString('es-CO')}*`,
-    ].join('\n')
+      `Total: $${total.toLocaleString('es-CO')}`,
+      ubicacion,
+    ].filter(Boolean).join('\n')
   }
 
   const handleWhatsApp = async () => {
@@ -45,16 +100,26 @@ export default function CheckoutPage() {
       setError('Por favor completa todos los campos')
       return
     }
+    if (!location) {
+      setError('Marca tu ubicación de entrega en el mapa')
+      return
+    }
+    if (coverage && !coverage.covered) {
+      setError('Tu ubicación está fuera del radio de cobertura del domicilio')
+      return
+    }
     setLoading(true)
     setError('')
     try {
-      await fetch(`${API}/orders`, {
+      const res = await fetch(`${API}/orders`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           clientName: form.clientName,
           address: form.address,
           phone: form.phone,
+          latitude: location.lat,
+          longitude: location.lng,
           items: items.map(i => ({
             productId: i.product.id,
             quantity: i.quantity,
@@ -62,6 +127,11 @@ export default function CheckoutPage() {
           })),
         }),
       })
+      if (!res.ok) {
+        const data = await res.json().catch(() => null)
+        setError(data?.error ?? 'Error al registrar el pedido. Intenta de nuevo.')
+        return
+      }
       const message = encodeURIComponent(buildWhatsAppMessage())
       window.open(`https://wa.me/${WHATSAPP_NUMBER}?text=${message}`, '_blank')
       clearCart()
@@ -74,59 +144,118 @@ export default function CheckoutPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      <header className="bg-green-500 text-white shadow-md">
-        <div className="max-w-2xl mx-auto px-4 py-3 flex items-center gap-3">
-          <button onClick={() => navigate('/')} className="text-white text-2xl leading-none">&larr;</button>
-          <h1 className="text-xl font-bold">Confirmar pedido</h1>
+    <div style={{ minHeight: '100vh', background: 'var(--background)' }}>
+      <header style={{ background: 'var(--primary)', color: '#fff', position: 'sticky', top: 0, zIndex: 30, boxShadow: '0 2px 12px rgba(0,110,10,0.25)' }}>
+        <div style={{ maxWidth: 640, margin: '0 auto', padding: '14px 16px', display: 'flex', alignItems: 'center', gap: 12 }}>
+          <button
+            onClick={() => navigate('/')}
+            aria-label="Volver"
+            style={{ width: 38, height: 38, borderRadius: '50%', background: 'rgba(255,255,255,0.18)', border: 'none', color: '#fff', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}
+          >
+            <ArrowLeft size={20} />
+          </button>
+          <div style={{ lineHeight: 1.2 }}>
+            <h1 style={{ fontSize: 18, fontWeight: 800 }}>Confirmar pedido</h1>
+            <p style={{ fontSize: 12, opacity: 0.85 }}>La Canasta · Minimercado</p>
+          </div>
         </div>
       </header>
 
-      <div className="max-w-2xl mx-auto px-4 py-6 flex flex-col gap-6">
+      <div style={{ maxWidth: 640, margin: '0 auto', padding: '24px 16px', display: 'flex', flexDirection: 'column', gap: 20 }}>
         {/* Resumen del pedido */}
-        <div className="bg-white rounded-2xl shadow-sm p-4 flex flex-col gap-3">
-          <h2 className="font-bold text-gray-800">Resumen</h2>
-          {items.map(({ product, quantity }) => (
-            <div key={product.id} className="flex justify-between text-sm text-gray-700">
-              <span>{product.name} <span className="text-gray-400">x{quantity}</span></span>
-              <span className="font-medium">${(product.price * quantity).toLocaleString('es-CO')}</span>
+        <div className="adm-card">
+          <h2 className="adm-card-title">Resumen</h2>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
+            {items.map(({ product, quantity }) => (
+              <div key={product.id} style={{ display: 'flex', justifyContent: 'space-between', fontSize: 14, color: 'var(--on-surface)' }}>
+                <span>{product.name} <span style={{ color: 'var(--on-surface-variant)' }}>x{quantity}</span></span>
+                <span style={{ fontWeight: 600 }}>${(product.price * quantity).toLocaleString('es-CO')}</span>
+              </div>
+            ))}
+            <div style={{ borderTop: '1px solid #f0f0f5', paddingTop: 12, marginTop: 4, display: 'flex', justifyContent: 'space-between', fontWeight: 800, fontSize: 18 }}>
+              <span>Total</span>
+              <span>${total.toLocaleString('es-CO')}</span>
             </div>
-          ))}
-          <div className="border-t pt-3 flex justify-between font-bold text-gray-900">
-            <span>Total</span>
-            <span>${total.toLocaleString('es-CO')}</span>
           </div>
         </div>
 
         {/* Formulario */}
-        <div className="bg-white rounded-2xl shadow-sm p-4 flex flex-col gap-4">
-          <h2 className="font-bold text-gray-800">Tus datos</h2>
-          {[
-            { label: 'Nombre completo', name: 'clientName', placeholder: 'Ej: Juan Pérez' },
-            { label: 'Dirección de entrega', name: 'address', placeholder: 'Ej: Calle 5 # 12-34, Barrio El Jardín' },
-            { label: 'Teléfono de contacto', name: 'phone', placeholder: 'Ej: 3001234567' },
-          ].map(field => (
-            <div key={field.name} className="flex flex-col gap-1">
-              <label className="text-sm font-medium text-gray-700">{field.label}</label>
-              <input
-                name={field.name}
-                value={form[field.name as keyof typeof form]}
-                onChange={handleChange}
-                placeholder={field.placeholder}
-                className="border border-gray-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-green-400"
+        <div className="adm-card">
+          <h2 className="adm-card-title">Tus datos</h2>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
+            {[
+              { label: 'Nombre completo', name: 'clientName', placeholder: 'Ej: Juan Pérez' },
+              { label: 'Dirección de entrega', name: 'address', placeholder: 'Ej: Calle 5 # 12-34, Barrio El Jardín' },
+              { label: 'Teléfono de contacto', name: 'phone', placeholder: 'Ej: 3001234567' },
+            ].map(field => (
+              <div key={field.name}>
+                <label className="adm-label">{field.label}</label>
+                <input
+                  name={field.name}
+                  value={form[field.name as keyof typeof form]}
+                  onChange={handleChange}
+                  placeholder={field.placeholder}
+                  className="adm-input"
+                />
+              </div>
+            ))}
+            {error && <p style={{ color: 'var(--error)', fontSize: 14 }}>{error}</p>}
+          </div>
+        </div>
+
+        {/* Ubicación de entrega */}
+        <div className="adm-card">
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 8 }}>
+            <h2 className="adm-card-title" style={{ marginBottom: 0 }}>Ubicación de entrega</h2>
+            <button
+              type="button" onClick={useMyLocation} disabled={locating}
+              style={{ color: 'var(--primary)', background: 'none', border: 'none', cursor: 'pointer', fontWeight: 600, fontSize: 14, display: 'inline-flex', alignItems: 'center', gap: 5 }}
+            >
+              {locating
+                ? <><Loader2 size={15} className="spin" /> Ubicando...</>
+                : <><MapPin size={15} /> Usar mi ubicación</>}
+            </button>
+          </div>
+          <p style={{ fontSize: 12, color: 'var(--on-surface-variant)', marginBottom: 12 }}>
+            Toca el mapa para marcar dónde quieres recibir el pedido. Si "Usar mi ubicación" no acierta (común en computadores), ajústala tocando el mapa.
+          </p>
+
+          {config && (
+            <div style={{ borderRadius: 'var(--rounded-md)', overflow: 'hidden', border: 'var(--border-level-1)' }}>
+              <LocationPicker
+                value={location}
+                onChange={setLocation}
+                storeLat={config.storeLat}
+                storeLng={config.storeLng}
+                coverageRadius={config.coverageRadius}
               />
             </div>
-          ))}
-          {error && <p className="text-red-500 text-sm">{error}</p>}
+          )}
+
+          {coverage && (
+            <div style={{ marginTop: 12, borderRadius: 'var(--rounded-default)', padding: 12, fontSize: 14, display: 'flex', alignItems: 'center', gap: 6,
+              background: coverage.covered ? '#e8f5e9' : '#ffeceb', color: coverage.covered ? '#006e0a' : '#ba1a1a' }}>
+              {coverage.covered
+                ? <><Check size={16} /> Dentro de cobertura ({coverage.distance.toFixed(2)} km)</>
+                : <><X size={16} /> Fuera de cobertura ({coverage.distance.toFixed(2)} km, máximo {config?.coverageRadius} km)</>}
+            </div>
+          )}
         </div>
 
         {/* Botón WhatsApp */}
         <button
           onClick={handleWhatsApp}
-          disabled={loading}
-          className="bg-green-500 hover:bg-green-600 disabled:bg-gray-300 text-white font-bold py-4 rounded-2xl text-base flex items-center justify-center gap-2 transition-colors shadow-md"
+          disabled={loading || (coverage ? !coverage.covered : false)}
+          style={{
+            display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8,
+            background: loading || (coverage && !coverage.covered) ? 'var(--surface-container-high)' : '#25D366',
+            color: loading || (coverage && !coverage.covered) ? 'var(--on-surface-variant)' : '#fff',
+            border: 'none', borderRadius: 'var(--rounded-lg)', padding: 16, fontSize: 16, fontWeight: 700,
+            cursor: loading || (coverage && !coverage.covered) ? 'not-allowed' : 'pointer',
+            boxShadow: 'var(--shadow-level-1)',
+          }}
         >
-          <span className="text-xl">💬</span>
+          <MessageCircle size={20} />
           {loading ? 'Registrando...' : 'Enviar pedido por WhatsApp'}
         </button>
       </div>

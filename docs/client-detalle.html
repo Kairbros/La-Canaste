@@ -1,0 +1,595 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Detalle de Producto - Organic Hass Avocados">
+  <title>Organic Hass Avocados | La Canasta</title>
+  <link rel="stylesheet" href="style.css">
+  <style>
+    .detail-container {
+      max-width: var(--container-max-width);
+      margin: 0 auto;
+      padding: 32px 24px 80px 24px;
+    }
+    
+    .breadcrumbs {
+      display: flex;
+      gap: 8px;
+      font-size: 14px;
+      color: var(--on-surface-variant);
+      margin-bottom: 32px;
+      font-weight: 500;
+    }
+    
+    .breadcrumbs a:hover {
+      color: var(--primary);
+    }
+    
+    .product-detail-layout {
+      display: grid;
+      grid-template-columns: 1.1fr 1fr;
+      gap: 60px;
+      margin-bottom: 80px;
+    }
+    @media (max-width: 900px) {
+      .product-detail-layout {
+        grid-template-columns: 1fr;
+        gap: 40px;
+      }
+    }
+    
+    /* Gallery styles */
+    .gallery-container {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+    
+    .main-image-wrapper {
+      width: 100%;
+      aspect-ratio: 1 / 1;
+      border-radius: var(--rounded-xl);
+      overflow: hidden;
+      background-color: var(--surface-container-low);
+      box-shadow: var(--shadow-level-1);
+    }
+    
+    .main-image {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    
+    .thumbnails-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 16px;
+    }
+    
+    .thumbnail-card {
+      aspect-ratio: 1 / 1;
+      border-radius: var(--rounded-md);
+      overflow: hidden;
+      cursor: pointer;
+      border: 2px solid transparent;
+      background-color: var(--surface-container-low);
+      transition: all 0.2s;
+    }
+    
+    .thumbnail-card:hover, .thumbnail-card.active {
+      border-color: var(--primary);
+    }
+    
+    .thumbnail-card img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    
+    .thumbnail-video-btn {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 24px;
+      color: var(--on-surface-variant);
+      height: 100%;
+      background-color: var(--surface-container-high);
+    }
+
+    /* Details panel */
+    .detail-badge-organic {
+      background-color: #e8f5e9;
+      color: var(--primary);
+      font-size: 11px;
+      font-weight: 700;
+      padding: 6px 14px;
+      border-radius: var(--rounded-sm);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      display: inline-block;
+      margin-bottom: 16px;
+    }
+    
+    .rating-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--on-surface-variant);
+      margin: 12px 0 24px 0;
+    }
+    
+    .rating-star {
+      color: #ffb300;
+    }
+    
+    .price-row {
+      display: flex;
+      align-items: baseline;
+      gap: 12px;
+      margin-bottom: 32px;
+    }
+    
+    .price-current {
+      font-size: 36px;
+      font-weight: 800;
+      color: var(--on-surface);
+    }
+    
+    .price-original {
+      font-size: 20px;
+      color: var(--on-surface-variant);
+      text-decoration: line-through;
+    }
+    
+    /* Meta cards */
+    .meta-cards-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+      margin: 32px 0;
+    }
+    
+    .meta-card {
+      background-color: var(--surface-container-low);
+      border-radius: var(--rounded-default);
+      padding: 16px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-size: 14px;
+      color: var(--on-surface-variant);
+    }
+    
+    .meta-card strong {
+      display: block;
+      color: var(--on-surface);
+    }
+    
+    .meta-card-icon {
+      font-size: 20px;
+    }
+    
+    /* Nutrition grid table */
+    .nutrition-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 12px;
+      font-size: 14px;
+      margin-top: 16px;
+    }
+    
+    .nutrition-item {
+      display: flex;
+      justify-content: space-between;
+      padding: 8px 0;
+      border-bottom: 1px solid var(--surface-container-high);
+    }
+
+    /* Footer styles */
+    .footer {
+      background-color: var(--surface-container-lowest);
+      border-top: 1px solid var(--outline-variant);
+      padding: 80px 24px 32px 24px;
+    }
+    
+    .footer-grid {
+      max-width: var(--container-max-width);
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 1.5fr 1fr 1fr 1fr;
+      gap: 48px;
+      margin-bottom: 60px;
+    }
+    @media (max-width: 900px) {
+      .footer-grid {
+        grid-template-columns: 1fr;
+        gap: 32px;
+      }
+    }
+    
+    .footer-col h4 {
+      font-size: 16px;
+      font-weight: 700;
+      margin-bottom: 20px;
+      color: var(--on-surface);
+    }
+    
+    .footer-col ul {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    
+    .footer-col a {
+      color: var(--on-surface-variant);
+      font-size: 14px;
+      transition: color 0.2s;
+    }
+    .footer-col a:hover {
+      color: var(--primary);
+    }
+    
+    .footer-bottom {
+      max-width: var(--container-max-width);
+      margin: 0 auto;
+      border-top: 1px solid var(--surface-container-high);
+      padding-top: 32px;
+      display: flex;
+      justify-content: space-between;
+      font-size: 13px;
+      color: var(--on-surface-variant);
+    }
+    @media (max-width: 600px) {
+      .footer-bottom {
+        flex-direction: column;
+        gap: 16px;
+        text-align: center;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Client Header Navigation -->
+  <header class="client-header">
+    <div class="client-header-container">
+      <a href="index.html" class="client-brand">La Canasta</a>
+      
+      <ul class="client-nav">
+        <li><a href="client-productos.html" class="client-nav-link active">Productos</a></li>
+        <li><a href="#" class="client-nav-link">Lácteos</a></li>
+        <li><a href="#" class="client-nav-link">Panadería</a></li>
+        <li><a href="#" class="client-nav-link">Carnes</a></li>
+        <li><a href="#" class="client-nav-link">Despensa</a></li>
+      </ul>
+
+      <div class="client-search">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z" />
+        </svg>
+        <input type="text" class="client-search-input" placeholder="Buscar ingredientes frescos...">
+      </div>
+
+      <div class="client-header-actions">
+        <!-- Cart Badge Trigger -->
+        <div class="cart-icon-wrapper js-cart-trigger">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" style="width: 26px; height: 26px; stroke: var(--on-surface);">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 10.5V6a3.75 3.75 0 10-7.5 0v4.5m11.356-1.993l1.263 12c.07.665-.45 1.243-1.119 1.243H4.25a1.125 1.125 0 01-1.12-1.243l1.264-12A1.125 1.125 0 015.513 7.5h12.974c.576 0 1.059.435 1.119 1.007zM8.625 10.5a.375.375 0 11-.75 0 .375.375 0 01.75 0zm7.5 0a.375.375 0 11-.75 0 .375.375 0 01.75 0z" />
+          </svg>
+          <span class="cart-badge">2</span>
+        </div>
+        
+        <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=200" alt="Usuario" style="width: 36px; height: 36px; border-radius: var(--rounded-full); object-fit: cover;">
+      </div>
+    </div>
+  </header>
+
+  <!-- Product Detail Section -->
+  <main class="detail-container">
+    
+    <!-- Breadcrumbs -->
+    <div class="breadcrumbs">
+      <a href="index.html">Inicio</a>
+      <span>&gt;</span>
+      <a href="client-productos.html">Productos</a>
+      <span>&gt;</span>
+      <span style="color: var(--on-surface);">Organic Hass Avocados</span>
+    </div>
+
+    <!-- Product Layout -->
+    <div class="product-detail-layout">
+      
+      <!-- Left: Images -->
+      <div class="gallery-container">
+        <div class="main-image-wrapper">
+          <img src="https://images.unsplash.com/photo-1523049673857-eb18f1d7b578?auto=format&fit=crop&q=80&w=600" alt="Avocados Sliced" class="main-image" id="js-main-image">
+        </div>
+        
+        <div class="thumbnails-grid">
+          <div class="thumbnail-card active" onclick="document.getElementById('js-main-image').src=this.querySelector('img').src; document.querySelectorAll('.thumbnail-card').forEach(c=>c.classList.remove('active')); this.classList.add('active');">
+            <img src="https://images.unsplash.com/photo-1523049673857-eb18f1d7b578?auto=format&fit=crop&q=80&w=600" alt="Avocado Sliced">
+          </div>
+          <div class="thumbnail-card" onclick="document.getElementById('js-main-image').src=this.querySelector('img').src; document.querySelectorAll('.thumbnail-card').forEach(c=>c.classList.remove('active')); this.classList.add('active');">
+            <img src="https://images.unsplash.com/photo-1603048588665-791ca8aea617?auto=format&fit=crop&q=80&w=600" alt="Avocados in Box">
+          </div>
+          <div class="thumbnail-card" onclick="document.getElementById('js-main-image').src=this.querySelector('img').src; document.querySelectorAll('.thumbnail-card').forEach(c=>c.classList.remove('active')); this.classList.add('active');">
+            <img src="https://images.unsplash.com/photo-1541532713592-79a0317b6b77?auto=format&fit=crop&q=80&w=600" alt="Avocado Toast">
+          </div>
+          <div class="thumbnail-card">
+            <div class="thumbnail-video-btn">▶</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Right: Info -->
+      <div>
+        <span class="detail-badge-organic">Certificado Orgánico</span>
+        <h2 class="display-xl" style="font-size: 40px; line-height: 48px; color: var(--on-surface); margin-bottom: 12px;">Organic Hass Avocados</h2>
+        
+        <p class="body-lg" style="color: var(--on-surface-variant);">Provenientes de los huertos de cundinamarca, estos aguacates son apreciados por su alto contenido de aceite y textura mantecosa.</p>
+        
+        <div class="rating-row">
+          <span class="rating-star">★</span>
+          <span><strong>4.9</strong> (124 reseñas)</span>
+        </div>
+
+        <div class="price-row">
+          <span class="price-current">$2.49</span>
+          <span class="price-original">$3.20</span>
+        </div>
+
+        <!-- Add to cart -->
+        <div style="display: flex; gap: 20px; align-items: center;">
+          <div class="quantity-selector">
+            <button class="js-qty-minus">-</button>
+            <span class="js-qty-value">2</span>
+            <button class="js-qty-plus">+</button>
+          </div>
+          <button class="btn-primary js-cart-trigger" style="flex-grow: 1; border-radius: var(--rounded-full); padding: 16px;">
+            🛒 Agregar al Carrito
+          </button>
+        </div>
+
+        <!-- Meta delivery info cards -->
+        <div class="meta-cards-row">
+          <div class="meta-card">
+            <span class="meta-card-icon">🚚</span>
+            <div>
+              Entrega
+              <strong>Mañana, 8 AM</strong>
+            </div>
+          </div>
+          <div class="meta-card">
+            <span class="meta-card-icon">🍃</span>
+            <div>
+              Empaque
+              <strong>100% Compostable</strong>
+            </div>
+          </div>
+        </div>
+
+        <!-- Collapsibles -->
+        <div class="collapsible-container">
+          
+          <!-- Nutritional info -->
+          <div>
+            <div class="collapsible-header">
+              <span>Información Nutricional</span>
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" style="width:18px; height:18px;">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
+              </svg>
+            </div>
+            <div class="collapsible-content">
+              <div class="nutrition-grid">
+                <div class="nutrition-item">
+                  <span>Calorías</span>
+                  <strong>240 kcal</strong>
+                </div>
+                <div class="nutrition-item">
+                  <span>Grasa Total</span>
+                  <strong>22g</strong>
+                </div>
+                <div class="nutrition-item">
+                  <span>Potasio</span>
+                  <strong>700mg</strong>
+                </div>
+                <div class="nutrition-item">
+                  <span>Fibra</span>
+                  <strong>10g</strong>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Health benefits -->
+          <div>
+            <div class="collapsible-header">
+              <span>Beneficios para la Salud</span>
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" style="width:18px; height:18px;">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
+              </svg>
+            </div>
+            <div class="collapsible-content" style="color: var(--on-surface-variant); font-size: 14px; line-height: 1.6;">
+              <p>Los aguacates orgánicos Hass son una fuente excelente de grasas monoinsaturadas saludables para el corazón, fibra dietética y potasio. Ayudan a regular el colesterol y promueven una absorción saludable de nutrientes.</p>
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+
+    <!-- Recommendations Slider/Grid -->
+    <section>
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px;">
+        <h3 class="headline-md" style="color: var(--on-surface); font-size: 22px;">Combina perfectamente con</h3>
+        <a href="client-productos.html" style="color: var(--primary); font-weight: 700; font-size: 14px;">Ver todos los productos</a>
+      </div>
+
+      <div class="product-grid">
+        
+        <!-- Rec 1 -->
+        <div class="product-card">
+          <div class="product-card-img-wrapper">
+            <img src="https://images.unsplash.com/photo-1518977676601-b53f82aba655?auto=format&fit=crop&q=80&w=200" alt="Tomatoes" class="product-card-img">
+          </div>
+          <h4 style="font-size: 14px; font-weight: 700; color: var(--on-surface); margin-top: 12px;">Organic Heirloom Tomatoes</h4>
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 8px;">
+            <div style="display:flex; flex-direction:column;">
+              <span style="font-size:11px; color:var(--on-surface-variant);">Precio por lb</span>
+              <span style="font-weight:700;">$5.99/lb</span>
+            </div>
+            <button class="btn-add-cart-circle" style="width:32px; height:32px;">+</button>
+          </div>
+        </div>
+
+        <!-- Rec 2 -->
+        <div class="product-card">
+          <div class="product-card-img-wrapper">
+            <img src="https://images.unsplash.com/photo-1615485290382-441e4d049cb5?auto=format&fit=crop&q=80&w=200" alt="Cilantro" class="product-card-img">
+          </div>
+          <h4 style="font-size: 14px; font-weight: 700; color: var(--on-surface); margin-top: 12px;">Organic Fresh Cilantro</h4>
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 8px;">
+            <div style="display:flex; flex-direction:column;">
+              <span style="font-size:11px; color:var(--on-surface-variant);">Precio por unidad</span>
+              <span style="font-weight:700;">$1.25/bunch</span>
+            </div>
+            <button class="btn-add-cart-circle" style="width:32px; height:32px;">+</button>
+          </div>
+        </div>
+
+        <!-- Rec 3 -->
+        <div class="product-card">
+          <div class="product-card-img-wrapper">
+            <img src="https://images.unsplash.com/photo-1508747703725-719ae257c84a?auto=format&fit=crop&q=80&w=200" alt="Onions" class="product-card-img">
+          </div>
+          <h4 style="font-size: 14px; font-weight: 700; color: var(--on-surface); margin-top: 12px;">Organic Red Onions</h4>
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 8px;">
+            <div style="display:flex; flex-direction:column;">
+              <span style="font-size:11px; color:var(--on-surface-variant);">Precio por lb</span>
+              <span style="font-weight:700;">$0.85/lb</span>
+            </div>
+            <button class="btn-add-cart-circle" style="width:32px; height:32px;">+</button>
+          </div>
+        </div>
+
+        <!-- Rec 4 -->
+        <div class="product-card">
+          <div class="product-card-img-wrapper">
+            <img src="https://images.unsplash.com/photo-1590502593747-42a996133562?auto=format&fit=crop&q=80&w=200" alt="Limes" class="product-card-img">
+          </div>
+          <h4 style="font-size: 14px; font-weight: 700; color: var(--on-surface); margin-top: 12px;">Organic Limes (3ct)</h4>
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 8px;">
+            <div style="display:flex; flex-direction:column;">
+              <span style="font-size:11px; color:var(--on-surface-variant);">Precio por unidad</span>
+              <span style="font-weight:700;">$1.99</span>
+            </div>
+            <button class="btn-add-cart-circle" style="width:32px; height:32px;">+</button>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Shopping Cart Drawer Overlay -->
+  <div class="cart-drawer-overlay" id="cart-drawer-overlay"></div>
+
+  <!-- Shopping Cart Drawer panel -->
+  <div class="cart-drawer" id="cart-drawer">
+    <div class="cart-drawer-header">
+      <h2>Mi Carrito</h2>
+      <button class="btn-close-drawer" id="cart-close">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" style="width: 20px; height: 20px;">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+        </svg>
+      </button>
+    </div>
+
+    <div class="cart-drawer-content">
+      <div class="cart-item">
+        <img src="https://images.unsplash.com/photo-1523049673857-eb18f1d7b578?auto=format&fit=crop&q=80&w=150" alt="Avocados" class="cart-item-img">
+        <div class="cart-item-info">
+          <div class="cart-item-title">Organic Hass Avocados</div>
+          <div class="cart-item-price">$2.49 / ud</div>
+          <div style="margin-top: 8px;">
+            <div class="quantity-selector">
+              <button class="js-qty-minus">-</button>
+              <span class="js-qty-value">2</span>
+              <button class="js-qty-plus">+</button>
+            </div>
+          </div>
+        </div>
+        <button class="category-card-btn" style="color: var(--error);">🗑️</button>
+      </div>
+    </div>
+
+    <div class="cart-drawer-footer">
+      <div class="cart-totals">
+        <div class="cart-total-row">
+          <span>Subtotal</span>
+          <span>$4.98</span>
+        </div>
+        <div class="cart-total-row">
+          <span>Envío</span>
+          <span>$2.50</span>
+        </div>
+        <div class="cart-total-row grand-total">
+          <span>Total</span>
+          <span>$7.48</span>
+        </div>
+      </div>
+      <a href="client-confirmacion.html" class="btn-primary" style="width: 100%; border-radius: var(--rounded-default); padding: 14px; box-shadow: none;">
+        Confirmar Compra
+      </a>
+    </div>
+  </div>
+
+  <!-- Store Footer -->
+  <footer class="footer">
+    <div class="footer-grid">
+      <div class="footer-col">
+        <a href="index.html" class="client-brand" style="display: block; margin-bottom: 20px;">La Canasta</a>
+        <p style="font-size: 14px; color: var(--on-surface-variant); line-height: 1.6; margin-bottom: 20px;">El destino principal para comestibles orgánicos del campo a la mesa. Calidad que puedes saborear, entregada en tu puerta.</p>
+      </div>
+      <div class="footer-col">
+        <h4>Compras</h4>
+        <ul>
+          <li><a href="client-productos.html">Productos</a></li>
+          <li><a href="#">Carnes y Mariscos</a></li>
+          <li><a href="#">Panadería</a></li>
+          <li><a href="#">Lácteos y Huevos</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Soporte</h4>
+        <ul>
+          <li><a href="#">Centro de Ayuda</a></li>
+          <li><a href="#">Política de Envío</a></li>
+          <li><a href="#">Contacto</a></li>
+          <li><a href="#">Sobre Nosotros</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Sostenibilidad</h4>
+        <p style="font-size: 14px; color: var(--on-surface-variant); line-height: 1.6;">Comprometidos con empaques 100% libres de plástico para 2025.</p>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>&copy; 2024 La Canasta Boutique. Todos los derechos reservados.</span>
+      <div style="display: flex; gap: 20px;">
+        <a href="#">Política de Privacidad</a>
+        <a href="#">Términos de Servicio</a>
+      </div>
+    </div>
+  </footer>
+
+  <script src="app.js"></script>
+</body>
+</html>

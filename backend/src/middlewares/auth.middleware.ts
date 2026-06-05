@@ -25,3 +25,11 @@ export const requireAdmin = (req: Request, res: Response, next: NextFunction) =>
   if (req.user?.role !== 'ADMIN') return res.status(403).json({ error: 'Acceso denegado' })
   next()
 }
+
+// Permite el acceso solo a los roles indicados.
+export const requireRole = (...roles: string[]) => (req: Request, res: Response, next: NextFunction) => {
+  if (!req.user || !roles.includes(req.user.role)) {
+    return res.status(403).json({ error: 'Acceso denegado' })
+  }
+  next()
+}

@@ -18,3 +18,10 @@ export interface CartItem {
   product: Product
   quantity: number
 }
+
+export interface Config {
+  id: number
+  coverageRadius: number
+  storeLat: number
+  storeLng: number
+}

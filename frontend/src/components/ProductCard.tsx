@@ -1,33 +1,44 @@
 import type { Product } from '../types'
 import { useCart } from '../context/CartContext'
+import { ShoppingCart, Plus } from 'lucide-react'
 
 export default function ProductCard({ product }: { product: Product }) {
   const { addItem } = useCart()
 
   return (
-    <div className="bg-white rounded-2xl shadow-md overflow-hidden flex flex-col">
-      <div className="h-40 bg-gray-100 flex items-center justify-center">
+    <div className="product-card">
+      {product.available ? (
+        <span className="badge-organic product-card-badge">Disponible</span>
+      ) : (
+        <span className="badge-status product-card-badge" style={{ background: 'var(--error-container)', color: 'var(--on-error-container)' }}>
+          Agotado
+        </span>
+      )}
+
+      <div className="product-card-img-wrapper">
         {product.image ? (
-          <img src={product.image} alt={product.name} className="h-full w-full object-cover" />
+          <img src={product.image} alt={product.name} className="product-card-img" />
         ) : (
-          <span className="text-5xl">🛒</span>
+          <div className="product-card-img" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'var(--on-surface-variant)' }}><ShoppingCart size={48} /></div>
         )}
       </div>
-      <div className="p-4 flex flex-col gap-2 flex-1">
-        <h3 className="font-semibold text-gray-800 text-sm leading-tight">{product.name}</h3>
-        <p className="text-green-600 font-bold text-lg">
-          ${product.price.toLocaleString('es-CO')}
-        </p>
-        <span className={`text-xs font-medium ${product.available ? 'text-green-500' : 'text-red-400'}`}>
-          {product.available ? 'Disponible' : 'Agotado'}
-        </span>
-        <button
-          onClick={() => addItem(product)}
-          disabled={!product.available}
-          className="mt-auto bg-green-500 hover:bg-green-600 disabled:bg-gray-300 text-white text-sm font-semibold py-2 rounded-xl transition-colors"
-        >
-          Agregar
-        </button>
+
+      <div className="product-card-content">
+        <h3 style={{ fontSize: 16, fontWeight: 700, color: 'var(--on-surface)' }}>{product.name}</h3>
+        <div className="product-card-price-row">
+          <div className="product-card-price-info">
+            <span className="unit-price">Precio por unidad</span>
+            <span className="price">${product.price.toLocaleString('es-CO')}</span>
+          </div>
+          <button
+            className="btn-add-cart-circle"
+            onClick={() => addItem(product)}
+            disabled={!product.available}
+            title="Agregar al carrito"
+          >
+            <Plus size={20} />
+          </button>
+        </div>
       </div>
     </div>
   )

@@ -933,7 +933,10 @@ export const OrderScalarFieldEnum = {
   phone: 'phone',
   status: 'status',
   total: 'total',
+  latitude: 'latitude',
+  longitude: 'longitude',
   userId: 'userId',
+  deliveryId: 'deliveryId',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const

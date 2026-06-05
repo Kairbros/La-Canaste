@@ -26,6 +26,27 @@ export const getStats = async (_req: Request, res: Response) => {
     }),
   ])
 
+  // Serie de ventas por día (últimos 14 días) para la gráfica de tendencia
+  const DAYS = 14
+  const since = new Date(startOfDay)
+  since.setDate(since.getDate() - (DAYS - 1))
+  const seriesOrders = await prisma.order.findMany({
+    where: { createdAt: { gte: since } },
+    select: { createdAt: true, total: true },
+  })
+  const salesByDay = Array.from({ length: DAYS }, (_, i) => {
+    const d = new Date(since)
+    d.setDate(since.getDate() + i)
+    const next = new Date(d)
+    next.setDate(d.getDate() + 1)
+    const dayOrders = seriesOrders.filter(o => o.createdAt >= d && o.createdAt < next)
+    return {
+      date: d.toISOString().slice(0, 10),
+      total: dayOrders.reduce((s, o) => s + o.total, 0),
+      count: dayOrders.length,
+    }
+  })
+
   const productIds = topProducts.map(p => p.productId)
   const products = await prisma.product.findMany({ where: { id: { in: productIds } } })
 
@@ -39,6 +60,7 @@ export const getStats = async (_req: Request, res: Response) => {
     week: { total: week._sum.total ?? 0, count: week._count },
     month: { total: month._sum.total ?? 0, count: month._count },
     totalOrders,
+    salesByDay,
     topProducts: topProductsWithName,
     recentOrders,
   })

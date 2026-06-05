@@ -1,16 +1,16 @@
-import { createContext, useContext, useState, ReactNode } from 'react'
+import { createContext, useContext, useState, type ReactNode } from 'react'
+import { API } from '../lib/api'
 
 interface AuthUser { id: number; name: string; email: string; role: string }
 
 interface AuthContextType {
   user: AuthUser | null
   token: string | null
-  login: (email: string, password: string) => Promise<void>
+  login: (email: string, password: string) => Promise<AuthUser>
   logout: () => void
 }
 
 const AuthContext = createContext<AuthContextType | null>(null)
-const API = 'http://localhost:4000/api'
 
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<AuthUser | null>(() => {
@@ -27,11 +27,14 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     })
     if (!res.ok) throw new Error('Credenciales incorrectas')
     const data = await res.json() as { token: string; user: AuthUser }
-    if (data.user.role !== 'ADMIN') throw new Error('No tienes permiso de administrador')
+    if (data.user.role !== 'ADMIN' && data.user.role !== 'DOMICILIARIO') {
+      throw new Error('No tienes acceso a esta plataforma')
+    }
     setToken(data.token)
     setUser(data.user)
     localStorage.setItem('admin_token', data.token)
     localStorage.setItem('admin_user', JSON.stringify(data.user))
+    return data.user
   }
 
   const logout = () => {

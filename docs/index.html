@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Portal de maquetas interactivas para La Canasta, minimercado digital premium.">
+  <title>La Canasta - Portal de Demostración</title>
+  <link rel="stylesheet" href="style.css">
+  <style>
+    .portal-banner {
+      background: linear-gradient(135deg, #006e0a 0%, #32cd32 100%);
+      color: white;
+      border-radius: var(--rounded-xl);
+      padding: 60px 40px;
+      margin-bottom: 48px;
+      box-shadow: 0 10px 30px rgba(0, 110, 10, 0.15);
+      position: relative;
+      overflow: hidden;
+    }
+    .portal-banner::after {
+      content: '';
+      position: absolute;
+      right: -100px;
+      bottom: -100px;
+      width: 350px;
+      height: 350px;
+      border-radius: var(--rounded-full);
+      background-color: rgba(255, 255, 255, 0.1);
+      pointer-events: none;
+    }
+    .portal-banner h1 {
+      font-size: 40px;
+      font-weight: 800;
+      margin-bottom: 12px;
+      letter-spacing: -0.02em;
+    }
+    .portal-banner p {
+      font-size: 18px;
+      opacity: 0.9;
+      max-width: 600px;
+      line-height: 1.6;
+    }
+    .tag {
+      display: inline-block;
+      padding: 6px 12px;
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      border-radius: var(--rounded-sm);
+      margin-bottom: 16px;
+    }
+    .tag-admin {
+      background-color: var(--surface-container-high);
+      color: var(--on-surface);
+    }
+    .tag-client {
+      background-color: #e8f5e9;
+      color: #2e7d32;
+    }
+    .grid-card-desc {
+      font-size: 14px;
+      color: var(--on-surface-variant);
+      margin-top: 8px;
+      line-height: 1.4;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="portal-container">
+    <div class="portal-banner">
+      <div class="tag tag-admin">Prototipo Interactivo</div>
+      <h1>La Canasta - Administración y Tienda</h1>
+      <p>Explora la maquetación interactiva y responsiva creada a partir de las pantallas diseñadas en Stitch, implementando la identidad visual basada en la frescura, vitalidad y minimalismo moderno.</p>
+    </div>
+
+    <div class="portal-sections-grid">
+      
+      <!-- Admin Central Card -->
+      <div class="portal-section-card">
+        <span class="tag tag-admin" style="align-self: flex-start;">Panel Administrativo</span>
+        <h2>Administración Central</h2>
+        <p>Vistas del sistema interno de gestión para el administrador, que permiten administrar el inventario, categorías, cobertura geográfica y analizar los reportes financieros.</p>
+        
+        <div class="portal-links-list">
+          <a href="admin-categorias.html" class="portal-link-item">
+            <div>
+              <strong>Gestión de Categorías</strong>
+              <div class="grid-card-desc">Administra los departamentos (Frutas, Lácteos, etc.) con tarjetas y resumen detallado.</div>
+            </div>
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" />
+            </svg>
+          </a>
+
+          <a href="admin-inventario.html" class="portal-link-item">
+            <div>
+              <strong>Gestión de Inventario</strong>
+              <div class="grid-card-desc">Control de stock, alertas de ítems bajos y KPIs financieros del catálogo.</div>
+            </div>
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" />
+            </svg>
+          </a>
+
+          <a href="admin-cobertura.html" class="portal-link-item">
+            <div>
+              <strong>Gestión de Cobertura</strong>
+              <div class="grid-card-desc">Configuración del radar de envíos con mapa interactivo y lista de repartidores.</div>
+            </div>
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" />
+            </svg>
+          </a>
+
+          <a href="admin-reportes.html" class="portal-link-item">
+            <div>
+              <strong>Informe de Ventas y Reportes</strong>
+              <div class="grid-card-desc">Analítica y gráficas animadas de rendimiento de ventas por canal e ingresos.</div>
+            </div>
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" />
+            </svg>
+          </a>
+        </div>
+      </div>
+
+      <!-- Client Front Card -->
+      <div class="portal-section-card">
+        <span class="tag tag-client" style="align-self: flex-start;">Tienda Virtual</span>
+        <h2>Experiencia del Cliente</h2>
+        <p>Interfaces orientadas al consumidor final para explorar productos frescos, seleccionar cantidades, gestionar el carrito y finalizar la orden de compra.</p>
+
+        <div class="portal-links-list">
+          <a href="client-productos.html" class="portal-link-item">
+            <div>
+              <strong>Catálogo de Productos</strong>
+              <div class="grid-card-desc">Cuadrícula de productos con chips de filtrado y carrito de compras (Drawer lateral).</div>
+            </div>
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" />
+            </svg>
+          </a>
+
+          <a href="client-detalle.html" class="portal-link-item">
+            <div>
+              <strong>Detalle de Producto</strong>
+              <div class="grid-card-desc">Ficha detallada del Aguacate Hass Orgánico, información nutricional y sugerencias.</div>
+            </div>
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" />
+            </svg>
+          </a>
+
+          <a href="client-confirmacion.html" class="portal-link-item">
+            <div>
+              <strong>Confirmación de Pedido</strong>
+              <div class="grid-card-desc">Pantalla de éxito post-compra con resumen detallado y dirección de envío.</div>
+            </div>
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" />
+            </svg>
+          </a>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+</body>
+</html>

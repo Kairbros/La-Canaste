@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'react'
 import { useAuth } from '../../context/AuthContext'
 import type { Category, Product } from '../../types'
-
-const API = 'http://localhost:4000/api'
+import { API } from '../../lib/api'
+import { ShoppingCart } from 'lucide-react'
 
 const empty = { name: '', price: '', categoryId: '', image: '', available: true }
 
@@ -46,81 +46,88 @@ export default function ProductsPage() {
   }
 
   return (
-    <div className="flex flex-col gap-4">
-      <div className="flex items-center justify-between">
-        <h1 className="text-2xl font-bold text-gray-800">Productos</h1>
-        <button onClick={() => { setForm(empty); setEditing(null); setShowForm(true) }}
-          className="bg-green-500 hover:bg-green-600 text-white text-sm font-semibold px-4 py-2 rounded-xl">
-          + Nuevo
+    <div>
+      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 24 }}>
+        <h1 className="adm-title" style={{ marginBottom: 0 }}>Inventario</h1>
+        <button onClick={() => { setForm(empty); setEditing(null); setShowForm(true) }} className="adm-btn">
+          + Nuevo producto
         </button>
       </div>
 
       {showForm && (
-        <form onSubmit={handleSubmit} className="bg-white rounded-2xl shadow-sm p-4 grid grid-cols-2 gap-3">
-          <div className="col-span-2 flex flex-col gap-1">
-            <label className="text-xs font-medium text-gray-600">Nombre</label>
-            <input required value={form.name} onChange={e => setForm(p => ({ ...p, name: e.target.value }))}
-              className="border rounded-xl px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-green-400" />
+        <form onSubmit={handleSubmit} className="adm-card" style={{ marginBottom: 24 }}>
+          <h2 className="adm-card-title">{editing !== null ? 'Editar producto' : 'Nuevo producto'}</h2>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: 14 }}>
+            <div style={{ gridColumn: '1 / -1' }}>
+              <label className="adm-label">Nombre</label>
+              <input required value={form.name} onChange={e => setForm(p => ({ ...p, name: e.target.value }))} className="adm-input" />
+            </div>
+            <div>
+              <label className="adm-label">Precio</label>
+              <input required type="number" value={form.price} onChange={e => setForm(p => ({ ...p, price: e.target.value }))} className="adm-input" />
+            </div>
+            <div>
+              <label className="adm-label">Categoría</label>
+              <select required value={form.categoryId} onChange={e => setForm(p => ({ ...p, categoryId: e.target.value }))} className="adm-select">
+                <option value="">Seleccionar</option>
+                {categories.map(c => <option key={c.id} value={c.id}>{c.name}</option>)}
+              </select>
+            </div>
+            <div style={{ gridColumn: '1 / -1' }}>
+              <label className="adm-label">URL imagen (opcional)</label>
+              <input value={form.image} onChange={e => setForm(p => ({ ...p, image: e.target.value }))} className="adm-input" />
+            </div>
           </div>
-          <div className="flex flex-col gap-1">
-            <label className="text-xs font-medium text-gray-600">Precio</label>
-            <input required type="number" value={form.price} onChange={e => setForm(p => ({ ...p, price: e.target.value }))}
-              className="border rounded-xl px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-green-400" />
-          </div>
-          <div className="flex flex-col gap-1">
-            <label className="text-xs font-medium text-gray-600">Categoría</label>
-            <select required value={form.categoryId} onChange={e => setForm(p => ({ ...p, categoryId: e.target.value }))}
-              className="border rounded-xl px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-green-400">
-              <option value="">Seleccionar</option>
-              {categories.map(c => <option key={c.id} value={c.id}>{c.name}</option>)}
-            </select>
-          </div>
-          <div className="col-span-2 flex flex-col gap-1">
-            <label className="text-xs font-medium text-gray-600">URL imagen (opcional)</label>
-            <input value={form.image} onChange={e => setForm(p => ({ ...p, image: e.target.value }))}
-              className="border rounded-xl px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-green-400" />
-          </div>
-          <div className="col-span-2 flex items-center gap-2">
-            <input type="checkbox" id="available" checked={form.available}
-              onChange={e => setForm(p => ({ ...p, available: e.target.checked }))} />
-            <label htmlFor="available" className="text-sm text-gray-700">Disponible</label>
-          </div>
-          <div className="col-span-2 flex gap-2 justify-end">
-            <button type="button" onClick={() => setShowForm(false)}
-              className="text-sm text-gray-500 hover:text-gray-700 px-4 py-2">Cancelar</button>
-            <button type="submit"
-              className="bg-green-500 hover:bg-green-600 text-white text-sm font-semibold px-4 py-2 rounded-xl">
-              {editing !== null ? 'Guardar cambios' : 'Crear producto'}
-            </button>
+          <label style={{ display: 'flex', alignItems: 'center', gap: 8, marginTop: 14, fontSize: 14, color: 'var(--on-surface)' }}>
+            <input type="checkbox" checked={form.available} onChange={e => setForm(p => ({ ...p, available: e.target.checked }))} />
+            Disponible
+          </label>
+          <div style={{ display: 'flex', gap: 10, justifyContent: 'flex-end', marginTop: 16 }}>
+            <button type="button" onClick={() => setShowForm(false)} className="adm-btn-ghost">Cancelar</button>
+            <button type="submit" className="adm-btn">{editing !== null ? 'Guardar cambios' : 'Crear producto'}</button>
           </div>
         </form>
       )}
 
-      <div className="bg-white rounded-2xl shadow-sm overflow-hidden">
-        <table className="w-full text-sm">
-          <thead className="bg-gray-50 text-gray-500 text-xs uppercase">
+      <div className="adm-card" style={{ padding: 0, overflow: 'hidden' }}>
+        <table className="custom-table">
+          <thead>
             <tr>
-              <th className="px-4 py-3 text-left">Producto</th>
-              <th className="px-4 py-3 text-left">Categoría</th>
-              <th className="px-4 py-3 text-right">Precio</th>
-              <th className="px-4 py-3 text-center">Estado</th>
-              <th className="px-4 py-3 text-right">Acciones</th>
+              <th>Producto</th>
+              <th>Categoría</th>
+              <th style={{ textAlign: 'right' }}>Precio</th>
+              <th style={{ textAlign: 'center' }}>Estado</th>
+              <th style={{ textAlign: 'right' }}>Acciones</th>
             </tr>
           </thead>
-          <tbody className="divide-y divide-gray-50">
+          <tbody>
+            {products.length === 0 && (
+              <tr><td colSpan={5} className="adm-empty" style={{ textAlign: 'center' }}>No hay productos aún.</td></tr>
+            )}
             {products.map(p => (
-              <tr key={p.id} className="hover:bg-gray-50">
-                <td className="px-4 py-3 font-medium text-gray-800">{p.name}</td>
-                <td className="px-4 py-3 text-gray-500">{p.category?.name}</td>
-                <td className="px-4 py-3 text-right font-semibold">${p.price.toLocaleString('es-CO')}</td>
-                <td className="px-4 py-3 text-center">
-                  <span className={`text-xs font-medium px-2 py-1 rounded-full ${p.available ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-600'}`}>
+              <tr key={p.id}>
+                <td>
+                  <div className="table-product-cell">
+                    {p.image
+                      ? <img src={p.image} alt={p.name} className="table-product-img" />
+                      : <div className="table-product-img" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'var(--on-surface-variant)' }}><ShoppingCart size={20} /></div>}
+                    <span className="table-product-name">{p.name}</span>
+                  </div>
+                </td>
+                <td style={{ color: 'var(--on-surface-variant)' }}>{p.category?.name}</td>
+                <td style={{ textAlign: 'right', fontWeight: 700 }}>${p.price.toLocaleString('es-CO')}</td>
+                <td style={{ textAlign: 'center' }}>
+                  <span className="adm-pill" style={p.available
+                    ? { background: '#e8f5e9', color: '#006e0a' }
+                    : { background: '#ffeceb', color: '#ba1a1a' }}>
                     {p.available ? 'Disponible' : 'Agotado'}
                   </span>
                 </td>
-                <td className="px-4 py-3 text-right flex justify-end gap-2">
-                  <button onClick={() => handleEdit(p)} className="text-blue-500 hover:text-blue-700 font-medium">Editar</button>
-                  <button onClick={() => handleDelete(p.id)} className="text-red-400 hover:text-red-600 font-medium">Eliminar</button>
+                <td style={{ textAlign: 'right' }}>
+                  <div style={{ display: 'flex', justifyContent: 'flex-end', gap: 14 }}>
+                    <button onClick={() => handleEdit(p)} className="adm-link edit">Editar</button>
+                    <button onClick={() => handleDelete(p.id)} className="adm-link danger">Eliminar</button>
+                  </div>
                 </td>
               </tr>
             ))}

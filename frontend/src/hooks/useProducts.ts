@@ -1,7 +1,6 @@
 import { useEffect, useState } from 'react'
 import type { Category, Product } from '../types'
-
-const API = 'http://localhost:4000/api'
+import { API } from '../lib/api'
 
 export function useCategories() {
   const [categories, setCategories] = useState<Category[]>([])

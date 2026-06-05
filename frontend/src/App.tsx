@@ -9,10 +9,19 @@ import DashboardPage from './pages/admin/DashboardPage'
 import ProductsPage from './pages/admin/ProductsPage'
 import CategoriesPage from './pages/admin/CategoriesPage'
 import OrdersPage from './pages/admin/OrdersPage'
+import CoveragePage from './pages/admin/CoveragePage'
+import DeliveryPage from './pages/DeliveryPage'
+import UsersPage from './pages/admin/UsersPage'
 
 function AdminGuard({ children }: { children: React.ReactNode }) {
   const { user } = useAuth()
   if (!user || user.role !== 'ADMIN') return <Navigate to="/admin/login" replace />
+  return <>{children}</>
+}
+
+function DeliveryGuard({ children }: { children: React.ReactNode }) {
+  const { user } = useAuth()
+  if (!user || user.role !== 'DOMICILIARIO') return <Navigate to="/admin/login" replace />
   return <>{children}</>
 }
 
@@ -26,6 +35,9 @@ export default function App() {
             <Route path="/" element={<CatalogPage />} />
             <Route path="/checkout" element={<CheckoutPage />} />
 
+            {/* Domiciliario */}
+            <Route path="/repartidor" element={<DeliveryGuard><DeliveryPage /></DeliveryGuard>} />
+
             {/* Admin */}
             <Route path="/admin/login" element={<LoginPage />} />
             <Route path="/admin" element={<AdminGuard><AdminLayout /></AdminGuard>}>
@@ -33,6 +45,8 @@ export default function App() {
               <Route path="products" element={<ProductsPage />} />
               <Route path="categories" element={<CategoriesPage />} />
               <Route path="orders" element={<OrdersPage />} />
+              <Route path="coverage" element={<CoveragePage />} />
+              <Route path="users" element={<UsersPage />} />
             </Route>
           </Routes>
         </CartProvider>

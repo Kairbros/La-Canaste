@@ -30,7 +30,8 @@ model User {
   phone     String?
   role      Role     @default(CLIENTE)
   createdAt DateTime @default(now())
-  orders    Order[]
+  orders    Order[]  @relation("ClientOrders")
+  deliveries Order[] @relation("Deliveries")
 }
 
 model Category {
@@ -58,8 +59,12 @@ model Order {
   phone        String
   status       OrderStatus @default(PENDIENTE)
   total        Float
+  latitude     Float?
+  longitude    Float?
   userId       Int?
-  user         User?       @relation(fields: [userId], references: [id])
+  user         User?       @relation("ClientOrders", fields: [userId], references: [id])
+  deliveryId   Int?
+  delivery     User?       @relation("Deliveries", fields: [deliveryId], references: [id])
   items        OrderItem[]
   createdAt    DateTime    @default(now())
   updatedAt    DateTime    @updatedAt

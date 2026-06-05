@@ -20,7 +20,13 @@ export const updateCategory = async (req: Request, res: Response) => {
 }
 
 export const deleteCategory = async (req: Request, res: Response) => {
-  const { id } = req.params
-  await prisma.category.delete({ where: { id: Number(id) } })
+  const id = Number(req.params['id'])
+  const count = await prisma.product.count({ where: { categoryId: id } })
+  if (count > 0) {
+    return res.status(409).json({
+      error: `No se puede eliminar: la categoría tiene ${count} producto(s). Elimina o reasigna esos productos primero.`,
+    })
+  }
+  await prisma.category.delete({ where: { id } })
   res.status(204).send()
 }
